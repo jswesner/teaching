@@ -156,17 +156,20 @@ prior_and_x %>%
 # sigma ~ ?
 # sd_cyl ~ ?
 
-N = 1  # number of simulations
+N = 10  # number of simulations
 
 # simulate priors
 
-varying_intercepts <- tibble(cyl = unique(d$cyl)) %>% 
-  mutate(sd_cyl = rexp(1, 0.001),
-         a_cyl = rnorm(nrow(.), 0, sd_cyl))
+varying_intercepts <- tibble(cyl = unique(d$cyl),
+                             n_levels = length(cyl)) %>%   # get levels of intercept
+  expand_grid(sim = 1:N) %>%                               # repeat levels sim times
+  group_by(sim) %>%                                        # group by sims
+  mutate(sd_cyl = rexp(1, 0.001),                          # simulate a standard deviation
+         a_cyl = rnorm(n_levels, 0, sd_cyl))               # simulate an intercept offset
 
 priors <- tibble(a = rnorm(N, 0, 10),
                  b = rnorm(N, 0, 10),
-                 sigma = rexp(N, 0.1),
+                 sigma = rexp(N, 0.001),
                  sim = 1:N) 
 
 # data (only the x values, since we're simulating y and mu and pretending we don't have them yet)
@@ -177,7 +180,7 @@ x <- tibble(x = d$hp,
 prior_and_x <- priors %>% expand_grid(x) %>%        # combine priors and x's
   left_join(varying_intercepts) %>%                 # add the varying intercepts
   mutate(mu = a + b*x,                              # simulate regressions - no varying intercept
-         mu_cyl = a + a_cyl + b*x,                          # simulate regressions - with varying intercept
+         mu_cyl = a + a_cyl + b*x,                  # simulate regressions - with varying intercept
          y = rnorm(nrow(.), mu, sigma),             # simulate data (e.g., y_rep) - no varying intercept
          y_cyl = rnorm(nrow(.), mu_cyl, sigma))     # simulate data (e.g., y_rep) - with varying intercept
 
@@ -186,5 +189,6 @@ prior_and_x %>%
   ggplot(aes(x = x, y = mu_cyl, group = interaction(cyl, sim), color = cyl)) + 
   geom_line() +
   geom_point(aes(y = y_cyl)) +
-  labs(y = "sim") 
+  labs(y = "sim") +
+  facet_wrap(~sim)
 
