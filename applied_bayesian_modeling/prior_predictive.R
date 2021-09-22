@@ -9,7 +9,6 @@ library(janitor)
 # load data
 d <- as_tibble(mtcars)
 
-
 # gaussian regression  -------
 
 # y ~ dnorm(mu, sigma)
@@ -65,24 +64,24 @@ gaus_brm <- brm(mpg ~ hp_c,
 
 # gamma regression  -------
 
-# y ~ dgamma2(scale, shape)
+# y ~ dgamma(scale, shape)
 # scale = mu/shape
 # log(mu)  = a + bx
 # a ~ ?
 # b ~ ?
 # shape ~ ?
 
-N = 10  # number of simulations
+N = 100  # number of simulations
 
 # simulate priors
 priors <- tibble(a = rnorm(N, 2, 1),
-                 b = rnorm(N, 0, 1),
+                 b = rnorm(N, 0, 0.01),
                  shape = rexp(N, 2), # for brms
                  scale = rexp(N, 2), # for rethinking
                  sim = 1:N)
 
 # data (only the x values, since we're simulating y and mu and pretending we don't have them yet)
-x <- (d$hp - mean(d$hp))/sd(d$hp)
+x <- mtcars$hp
 
 # combine and simulate
 prior_and_x <- priors %>% expand_grid(x = x) %>%    # combine priors and x's
@@ -94,7 +93,9 @@ prior_and_x %>%
   ggplot(aes(x = x, y = mu, group = sim)) + 
   geom_line() +
   geom_point(aes(y = y)) +
-  labs(y = "sim") 
+  labs(y = "sim") +
+  # scale_y_log10() +
+  NULL
 
 # fit with rethinking (NOTE: rethinking and brms use different parameterizations for gamma)
 gamma_ret <- ulam(
@@ -141,8 +142,8 @@ prior_and_x <- priors %>%
   pivot_longer(cols = c(mu_3, mu_4, mu_5), values_to = "mu") %>% 
   separate(name, c("measure", "x")) %>% 
   mutate(x = as.numeric(x)) %>% 
-  right_join(d %>% select(gear) %>% rename(x = gear)) %>% # repeat means for each row of gear in original data
-  mutate(y = rnorm(nrow(.), mu, sigma))            # simulate data (e.g., y_rep)
+  right_join(d %>% select(gear) %>% rename(x = gear)) %>%              # repeat means for each row of gear in original data
+  mutate(y = rnorm(nrow(.), mu, sigma))                                # simulate data (e.g., y_rep)
 
 # plot
 prior_and_x %>% 
@@ -150,6 +151,35 @@ prior_and_x %>%
   geom_line() +
   geom_point(aes(y = y)) +
   labs(y = "sim") 
+
+# fit with rethinking
+# make the data matrix
+d_mat <- d %>% mutate(gear4 = case_when(gear == 4 ~ 1, TRUE ~ 0),
+                      gear5 = case_when(gear == 5 ~ 1, TRUE ~ 0))
+
+gaus_anova_ret <- ulam(
+  alist(mpg ~ dnorm(mu, sigma),
+        mu <- a + b1*gear4 + b2*gear5,
+        a ~ dnorm(0, 10),
+        b1 ~ dnorm(0, 10),
+        b2 ~ dnorm(0, 10),
+        sigma ~ dexp(0.01)
+        ),
+  data = list(mpg = d_mat$mpg,
+              gear4 = d_mat$gear4,
+              gear5 = d_mat$gear5)
+)
+
+# fit with brms
+d_brm <- d %>% mutate(gear_f = as.factor(gear)) # make gear a factor
+
+gaus_anova_brm <- brm(mpg ~ gear_f,
+                      family = gaussian(),
+                      data = d_brm,
+                      prior = c(prior(normal(0, 10), class = "Intercept"),
+                                prior(normal(0, 10), class = "b"),
+                                prior(exponential(0.01), class = "sigma")))
+
 
 # gamma anova  -------
 
@@ -187,6 +217,38 @@ prior_and_x %>%
   geom_point(aes(y = y)) +
   labs(y = "sim") 
 
+# fit with rethinking (NOTE: rethinking and brms use different parameterizations for gamma)
+# make the data matrix
+d_mat <- d %>% mutate(gear4 = case_when(gear == 4 ~ 1, TRUE ~ 0),
+                      gear5 = case_when(gear == 5 ~ 1, TRUE ~ 0))
+
+anova_gamma_ret <- ulam(
+  alist(
+    mpg ~ dgamma2(mu, scale),
+    log(mu) <- a + b1*gear4 + b2*gear5,
+    a ~ dnorm(0, 2),
+    b1 ~ dnorm(0, 1),
+    b2 ~ dnorm(0, 1),
+    scale ~ dexp(0.1)
+  ),
+  data = list(mpg = d_mat$mpg,
+              gear4 = d_mat$gear4,
+              gear5 = d_mat$gear5),
+  cores = 4)
+
+# fit with brms (NOTE: rethinking and brms use different parameterizations for gamma)
+
+d_brm <- d %>% mutate(gear_f = as.factor(gear)) # make gear a factor
+
+anova_gamma_brm <- brm(mpg ~ gear_f,
+    family = Gamma(link = "log"),
+    data = d_brm,
+    prior = c(prior(normal(0, 1), class = "Intercept"),
+              prior(normal(0, 1), class = "b"),
+              prior(exponential(0.1), class = "shape")),
+    cores = 4)
+
+
 # gaussian regression hierarchical------
 
 # y ~ dnorm(mu, sigma)
@@ -205,12 +267,12 @@ varying_intercepts <- tibble(cyl = unique(d$cyl),
                              n_levels = length(cyl)) %>%   # get levels of intercept
   expand_grid(sim = 1:N) %>%                               # repeat levels sim times
   group_by(sim) %>%                                        # group by sims
-  mutate(sd_cyl = rexp(1, 0.001),                          # simulate a standard deviation
+  mutate(sd_cyl = rexp(1, 0.01),                          # simulate a standard deviation
          a_cyl = rnorm(n_levels, 0, sd_cyl))               # simulate an intercept offset
 
 priors <- tibble(a = rnorm(N, 0, 10),
                  b = rnorm(N, 0, 10),
-                 sigma = rexp(N, 0.001),
+                 sigma = rexp(N, 0.01),
                  sim = 1:N) 
 
 # data (only the x values, since we're simulating y and mu and pretending we don't have them yet)
@@ -232,4 +294,36 @@ prior_and_x %>%
   geom_point(aes(y = y_cyl)) +
   labs(y = "sim") +
   facet_wrap(~sim)
+
+# fit in rethinking
+d$cyl_int <- as.integer(as.factor(d$cyl)) # make cylinder an integer with lowest value = 1
+d$hp_s <- (d$hp - mean(d$hp))/sd(d$hp)
+
+gaus_h_ret <- ulam(
+  alist(mpg ~ dnorm(mu, sigma),
+        mu <- a + a_cyl[cyl_int] + b1*hp_s,
+        a ~ dnorm(0, 10),
+        b1 ~ dnorm(0, 10),
+        sigma ~ dexp(0.1),
+        a_cyl[cyl_int] ~ dnorm(0, sd_cyl),
+        sd_cyl ~ dexp(0.01)),
+  data = list(mpg = d$mpg,
+              hp_s = d$hp_s,
+              cyl_int = d$cyl_int), cores = 4
+)
+
+# fit in brms
+d$cyl_fac <- as.factor(d$cyl) # make cylinder a factor
+d$hp_s <- (d$hp - mean(d$hp))/sd(d$hp)
+
+gaus_h_brm <- brm(mpg ~ hp_s + (1|cyl_fac),
+                  data = d,
+                  family = gaussian(),
+                  prior = c(prior(normal(0, 10), class = "Intercept"),
+                            prior(normal(0, 10), class = "b"),
+                            prior(exponential(0.1), class = "sigma"),
+                            prior(exponential(0.01), class = "sd")),
+                  cores = 4
+                  )
+
 
