@@ -50,7 +50,8 @@ gaus_ret <- ulam(
     b ~ dnorm(0, 0.1),
     sigma ~ dexp(1)),
   data = list(mpg = d$mpg, hp_c = d$hp - mean(d$hp)),
-  cores = 4)
+  cores = 4, chains = 1, iter = 1000, 
+  file = "applied_bayesian_modeling/models/gaus_ret.rds")
 
 
 # fit with brms
@@ -60,7 +61,8 @@ gaus_brm <- brm(mpg ~ hp_c,
                 prior = c(prior(normal(25, 5), class = "Intercept"),
                           prior(normal(0, 0.1), class = "b"),
                           prior(exponential(1), class = "sigma")), 
-                cores = 4)
+                cores = 4, chains = 1, iter = 1000,
+                file = "applied_bayesian_modeling/models/gaus_brm.rds")
 
 # gamma regression  -------
 
@@ -106,7 +108,8 @@ gamma_ret <- ulam(
     b ~ dnorm(0, 1),
     scale ~ dexp(0.1)),
   data = list(mpg = d$mpg, hp_c = (d$hp - mean(d$hp))/sd(d$hp)),
-  cores = 4)
+  cores = 4, chains = 1, iter = 1000, 
+  file = "applied_bayesian_modeling/models/gamma_ret.rds")
 
 # fit with brms (NOTE: rethinking and brms use different parameterizations for gamma)
 gamma_brm <- brm(mpg ~ hp_c, 
@@ -115,7 +118,8 @@ gamma_brm <- brm(mpg ~ hp_c,
                  prior = c(prior(normal(3, 1), class = "Intercept"),
                            prior(normal(0, 1), class = "b"),
                            prior(exponential(0.1), class = "shape")),
-                 cores = 4)
+                 cores = 4, chains = 1, iter = 1000, 
+                 file = "applied_bayesian_modeling/models/gaus_brm.rds")
 
 # gaussian anova  -------
 
@@ -167,7 +171,9 @@ gaus_anova_ret <- ulam(
         ),
   data = list(mpg = d_mat$mpg,
               gear4 = d_mat$gear4,
-              gear5 = d_mat$gear5)
+              gear5 = d_mat$gear5),
+  cores = 4, chains = 1, iter = 1000, 
+  file = "applied_bayesian_modeling/models/gaus_anova_ret.rds"
 )
 
 # fit with brms
@@ -178,7 +184,9 @@ gaus_anova_brm <- brm(mpg ~ gear_f,
                       data = d_brm,
                       prior = c(prior(normal(0, 10), class = "Intercept"),
                                 prior(normal(0, 10), class = "b"),
-                                prior(exponential(0.01), class = "sigma")))
+                                prior(exponential(0.01), class = "sigma")),
+                      cores = 4, chains = 1, iter = 1000, 
+                      file = "applied_bayesian_modeling/models/gaus_anova_brm.rds")
 
 
 # gamma anova  -------
@@ -234,7 +242,8 @@ anova_gamma_ret <- ulam(
   data = list(mpg = d_mat$mpg,
               gear4 = d_mat$gear4,
               gear5 = d_mat$gear5),
-  cores = 4)
+  cores = 4, chains = 1, iter = 1000, 
+  file = "applied_bayesian_modeling/models/anova_gamma_ret.rds")
 
 # fit with brms (NOTE: rethinking and brms use different parameterizations for gamma)
 
@@ -246,7 +255,8 @@ anova_gamma_brm <- brm(mpg ~ gear_f,
     prior = c(prior(normal(0, 1), class = "Intercept"),
               prior(normal(0, 1), class = "b"),
               prior(exponential(0.1), class = "shape")),
-    cores = 4)
+    cores = 4, chains = 1, iter = 1000, 
+    file = "applied_bayesian_modeling/models/anova_gamma_brm.rds")
 
 
 # gaussian regression hierarchical------
@@ -309,7 +319,8 @@ gaus_h_ret <- ulam(
         sd_cyl ~ dexp(0.01)),
   data = list(mpg = d$mpg,
               hp_s = d$hp_s,
-              cyl_int = d$cyl_int), cores = 4
+              cyl_int = d$cyl_int), cores = 4, chains = 1, iter = 1000, 
+  file = "applied_bayesian_modeling/models/gaus_h_ret.rds"
 )
 
 # fit in brms
@@ -323,7 +334,8 @@ gaus_h_brm <- brm(mpg ~ hp_s + (1|cyl_fac),
                             prior(normal(0, 10), class = "b"),
                             prior(exponential(0.1), class = "sigma"),
                             prior(exponential(0.01), class = "sd")),
-                  cores = 4
+                  cores = 4, chains = 1, iter = 1000, 
+                  file = "applied_bayesian_modeling/models/gaus_h_brm.rds"
                   )
 
 
