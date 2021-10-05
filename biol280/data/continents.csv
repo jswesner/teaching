@@ -1,0 +1,281 @@
+country,continent,income_groups,landlocked,latitude,longitude,main_religion_2008
+Abkhazia,NA,NA,NA,NA,NA,NA
+Aruba,NA,high_income,coastline,12.5,-69.96667,christian
+Afghanistan,Asia,low_income,landlocked,33,66,muslim
+Angola,Africa,lower_middle_income,coastline,-12.5,18.5,christian
+Anguilla,NA,NA,coastline,18.21667,-63.05,christian
+Akrotiri and Dhekelia,NA,NA,coastline,NA,NA,NA
+Åland,NA,NA,coastline,60.25,20,NA
+Albania,Europe,upper_middle_income,coastline,41,20,muslim
+Andorra,Europe,high_income,landlocked,42.50779,1.52109,christian
+Netherlands Antilles,NA,NA,coastline,NA,NA,NA
+United Arab Emirates,Asia,high_income,coastline,23.75,54.5,muslim
+Argentina,South America,upper_middle_income,coastline,-34,-64,christian
+Armenia,Europe,upper_middle_income,landlocked,40.25,45,christian
+Armenia,Asia,upper_middle_income,landlocked,40.25,45,christian
+American Samoa,NA,upper_middle_income,coastline,-11.056,-171.082,christian
+Antarctica,NA,NA,NA,-90,0,NA
+Antigua and Barbuda,North America,high_income,coastline,17.05,-61.8,christian
+Australia,Oceania,high_income,coastline,-25,135,christian
+Austria,Europe,high_income,landlocked,47.33333,13.33333,christian
+Azerbaijan,Europe,upper_middle_income,landlocked,40.5,47.5,muslim
+Azerbaijan,Asia,upper_middle_income,landlocked,40.5,47.5,muslim
+Burundi,Africa,low_income,landlocked,-3.5,30,christian
+Belgium,Europe,high_income,coastline,50.75,4.5,christian
+Benin,Africa,low_income,coastline,9.5,2.25,NA
+Burkina Faso,Africa,low_income,landlocked,12.5,-1.66667,muslim
+Bangladesh,Asia,lower_middle_income,coastline,24,90,muslim
+Bulgaria,Europe,upper_middle_income,coastline,42.66667,25.25,christian
+Bahrain,Asia,high_income,coastline,26.03333,50.55,muslim
+Bahamas,North America,high_income,coastline,25.04082,-77.37122,christian
+Bosnia and Herzegovina,Europe,upper_middle_income,coastline,44.25,17.83333,NA
+Belarus,Europe,upper_middle_income,landlocked,53,28,christian
+Belize,North America,upper_middle_income,coastline,17.49952,-88.19756,christian
+Bermuda,NA,high_income,coastline,32.2949,-64.78303,christian
+Bolivia,South America,lower_middle_income,landlocked,-17,-65,christian
+Bouvet Island,NA,NA,NA,NA,NA,NA
+Brazil,South America,upper_middle_income,coastline,-10,-55,christian
+Barbados,North America,high_income,coastline,13.16667,-59.53333,christian
+Brunei,Asia,high_income,coastline,4.5,114.66667,muslim
+Bhutan,Asia,lower_middle_income,landlocked,27.5,90.5,eastern_religions
+Botswana,Africa,upper_middle_income,landlocked,-22,24,christian
+Central African Republic,Africa,low_income,landlocked,7,21,NA
+Canada,North America,high_income,coastline,60.10867,-113.64258,christian
+Cocos Island,NA,NA,coastline,-12.1642,96.87332,NA
+Channel Islands,NA,high_income,coastline,NA,NA,christian
+Switzerland,Europe,high_income,landlocked,47.00016,8.01427,christian
+Czechoslovakia,NA,NA,landlocked,NA,NA,NA
+Chile,South America,high_income,coastline,-33.45694,-70.64827,christian
+China,Asia,upper_middle_income,coastline,35,105,eastern_religions
+Cote d'Ivoire,Africa,lower_middle_income,coastline,8,-5.5,NA
+Cameroon,Africa,lower_middle_income,coastline,6,12.5,christian
+"Congo, Dem. Rep.",Africa,low_income,landlocked,-2.5,23.5,christian
+"Congo, Rep.",Africa,lower_middle_income,coastline,-1,15.5,christian
+Cook Is,NA,NA,coastline,-21.24842,-159.78516,christian
+Colombia,South America,upper_middle_income,coastline,4,-73.25,christian
+Comoros,Africa,lower_middle_income,coastline,-12.23333,44.44553,muslim
+Cape Verde,Africa,lower_middle_income,coastline,16,-24,christian
+Costa Rica,North America,upper_middle_income,coastline,10,-84,christian
+Cuba,North America,upper_middle_income,coastline,22,-79.5,christian
+Christmas Island,NA,NA,coastline,-10.5,105.66667,NA
+Cayman Islands,NA,high_income,coastline,19.5,-80.66667,christian
+Cyprus,Europe,high_income,coastline,35,33,christian
+Cyprus,Asia,high_income,coastline,35,33,christian
+Northern Cyprus,NA,NA,coastline,NA,NA,NA
+Czech Republic,Europe,high_income,landlocked,49.75,15,christian
+Germany,Europe,high_income,coastline,51.5,10.5,christian
+East Germany,NA,NA,coastline,NA,NA,NA
+West Germany,NA,NA,coastline,NA,NA,NA
+Djibouti,Africa,lower_middle_income,coastline,11.58901,43.14503,muslim
+Dominica,North America,upper_middle_income,coastline,15.5,-61.33333,christian
+Denmark,Europe,high_income,coastline,56,10,christian
+Dominican Republic,North America,upper_middle_income,coastline,19,-70.66667,christian
+Algeria,Africa,upper_middle_income,coastline,28,3,muslim
+Ecuador,South America,upper_middle_income,coastline,-1.25,-78.25,christian
+Egypt,Africa,lower_middle_income,coastline,27,30,muslim
+Eritrea,Africa,low_income,coastline,15,39,muslim
+Eritrea and Ethiopia,NA,NA,coastline,NA,NA,NA
+Western Sahara,NA,NA,coastline,24.49215,-12.65625,muslim
+Spain,Europe,high_income,coastline,40,-4,christian
+Estonia,Europe,high_income,coastline,59,26,christian
+Ethiopia,Africa,low_income,coastline,9,39.5,christian
+Finland,Europe,high_income,coastline,64,26,christian
+Fiji,Oceania,upper_middle_income,coastline,-18,178,christian
+Falkland Is (Malvinas),NA,NA,coastline,-51.75,-59.16667,christian
+France,Europe,high_income,coastline,46,2,christian
+French Southern and Antarctic Lands,NA,NA,NA,NA,NA,NA
+Clipperton,NA,NA,NA,NA,NA,NA
+Faeroe Islands,NA,high_income,coastline,62,-7,christian
+"Micronesia, Fed. Sts.",Oceania,lower_middle_income,coastline,6.924,158.162,christian
+Gabon,Africa,upper_middle_income,coastline,-1,11.75,christian
+Guernsey,NA,NA,coastline,49.45474,-2.57629,NA
+Isle of Man,NA,high_income,coastline,54.15,-4.48333,christian
+United Kingdom,Europe,high_income,coastline,54.75844,-2.69531,christian
+Georgia,Europe,upper_middle_income,coastline,41.99998,43.4999,christian
+Georgia,Asia,upper_middle_income,coastline,41.99998,43.4999,christian
+Ghana,Africa,lower_middle_income,coastline,8.1,-1.2,christian
+Gibraltar,NA,high_income,coastline,36.14474,-5.35257,christian
+Guinea,Africa,low_income,coastline,10.83333,-10.66667,muslim
+Guadeloupe,NA,NA,coastline,16.25,-61.58333,christian
+Gambia,Africa,low_income,coastline,13.5,-15.5,muslim
+Guinea-Bissau,Africa,low_income,coastline,12,-15,NA
+Equatorial Guinea,Africa,upper_middle_income,coastline,1.7,10.5,christian
+Greece,Europe,high_income,coastline,39,22,christian
+Grenada,North America,upper_middle_income,coastline,12.11667,-61.66667,christian
+Greenland,NA,high_income,coastline,72,-40,christian
+Guatemala,North America,upper_middle_income,coastline,14.64072,-90.51327,christian
+French Guiana,NA,NA,coastline,4,-53,christian
+Guam,NA,high_income,coastline,13.47861,144.81834,christian
+Guyana,South America,upper_middle_income,coastline,5,-59,christian
+Heard and McDonald Islands,NA,NA,NA,NA,NA,NA
+"Hong Kong, China",NA,high_income,coastline,22.28552,114.15769,eastern_religions
+Honduras,North America,lower_middle_income,coastline,15,-86.5,christian
+Holy See,Europe,NA,landlocked,41.90236,12.45332,christian
+Croatia,Europe,high_income,coastline,45.16667,15.5,christian
+Haiti,North America,low_income,coastline,19,-72.41667,christian
+Hungary,Europe,high_income,landlocked,47,20,christian
+Indonesia,Asia,lower_middle_income,coastline,-5,120,muslim
+India,Asia,lower_middle_income,coastline,22,79,eastern_religions
+British Indian Ocean Territory,NA,NA,NA,-6,72,NA
+Ireland,Europe,high_income,coastline,53,-8,christian
+Iran,Asia,upper_middle_income,coastline,32,53,muslim
+Iraq,Asia,upper_middle_income,coastline,33,44,muslim
+Iceland,Europe,high_income,coastline,65,-18,christian
+Israel,Asia,high_income,coastline,31.5,34.75,NA
+Italy,Europe,high_income,coastline,42.83333,12.83333,christian
+Jamaica,North America,upper_middle_income,coastline,18.16667,-77.25,christian
+Jersey,NA,NA,coastline,49.21667,-2.11667,NA
+Jordan,Asia,upper_middle_income,coastline,31,36,muslim
+Japan,Asia,high_income,coastline,35.68536,139.75309,eastern_religions
+Kazakhstan,Europe,upper_middle_income,landlocked,48,68,muslim
+Kazakhstan,Asia,upper_middle_income,landlocked,48,68,muslim
+Kenya,Africa,lower_middle_income,coastline,1,38,christian
+Kyrgyz Republic,Asia,lower_middle_income,landlocked,41.5,75,muslim
+Cambodia,Asia,lower_middle_income,coastline,13,105,eastern_religions
+Kiribati,Oceania,lower_middle_income,coastline,1.421,172.984,christian
+St. Kitts and Nevis,North America,high_income,coastline,17.33333,-62.75,christian
+South Korea,Asia,high_income,coastline,36.5,127.75,NA
+United Korea (former),NA,NA,NA,NA,NA,NA
+Kosovo,NA,upper_middle_income,landlocked,NA,NA,muslim
+Kuwait,Asia,high_income,coastline,29.36972,47.97833,muslim
+Lao,Asia,lower_middle_income,landlocked,18,105,eastern_religions
+Lebanon,Asia,upper_middle_income,coastline,33.83333,35.83333,NA
+Liberia,Africa,low_income,coastline,6.5,-9.5,NA
+Libya,Africa,upper_middle_income,coastline,28,17,muslim
+St. Lucia,North America,upper_middle_income,coastline,13.88333,-60.96667,christian
+Liechtenstein,Europe,high_income,landlocked,47.16667,9.53333,christian
+Sri Lanka,Asia,upper_middle_income,coastline,7.75,80.75,eastern_religions
+Lesotho,Africa,lower_middle_income,landlocked,-29.5,28.25,christian
+Lithuania,Europe,high_income,coastline,55.41667,24,christian
+Luxembourg,Europe,high_income,landlocked,49.61167,6.13,christian
+Latvia,Europe,high_income,coastline,57,25,christian
+"Macao, China",NA,high_income,coastline,22.20056,113.54611,eastern_religions
+St. Martin (French part),NA,high_income,NA,NA,NA,NA
+Morocco,Africa,lower_middle_income,coastline,32,-6,muslim
+Monaco,Europe,high_income,coastline,43.73333,7.41667,christian
+Moldova,Europe,lower_middle_income,landlocked,47.25,28.58333,christian
+Madagascar,Africa,low_income,coastline,-20,47,NA
+Maldives,Asia,upper_middle_income,coastline,3.2,73,muslim
+Mexico,North America,upper_middle_income,coastline,19.42847,-99.12766,christian
+Marshall Islands,Oceania,upper_middle_income,coastline,7.113,171.236,christian
+North Macedonia,NA,upper_middle_income,landlocked,41.66667,21.75,christian
+Mali,Africa,low_income,landlocked,18,-2,muslim
+Malta,Europe,high_income,coastline,35.91667,14.43333,christian
+Myanmar,Asia,lower_middle_income,coastline,21,96,eastern_religions
+Montenegro,Europe,upper_middle_income,coastline,42.75,19.25,christian
+Mongolia,Asia,lower_middle_income,landlocked,46,105,NA
+Northern Mariana Islands,NA,high_income,coastline,15.214,145.756,christian
+Mozambique,Africa,low_income,coastline,-18.25,35,christian
+Mauritania,Africa,lower_middle_income,coastline,20.25,-10.5,muslim
+Montserrat,NA,NA,coastline,16.75,-62.2,christian
+Martinique,NA,NA,coastline,14.66667,-61,christian
+Mauritius,Africa,upper_middle_income,coastline,-20.3,57.58333,NA
+Malawi,Africa,low_income,landlocked,-13.5,34,christian
+Malaysia,Asia,upper_middle_income,coastline,2.5,112.5,muslim
+Mayotte,NA,NA,coastline,-12.83333,45.16667,muslim
+Namibia,Africa,upper_middle_income,coastline,-22,17,christian
+New Caledonia,NA,high_income,coastline,-21.5,165.5,christian
+Niger,Africa,low_income,landlocked,18,9,muslim
+Norfolk Island,NA,NA,coastline,-29.03333,167.95,NA
+Nigeria,Africa,lower_middle_income,coastline,10,8,NA
+Ngorno-Karabakh,NA,NA,NA,NA,NA,NA
+Nicaragua,North America,lower_middle_income,coastline,13,-85,christian
+Niue,NA,NA,coastline,-19.03333,-169.86667,christian
+Netherlands,Europe,high_income,coastline,52.25,5.75,christian
+Curaçao,NA,high_income,coastline,12.16667,-68.96667,christian
+Norway,Europe,high_income,coastline,62,10,christian
+Nepal,Asia,low_income,landlocked,28,84,eastern_religions
+Nauru,Oceania,upper_middle_income,coastline,-0.517,166.933,christian
+New Zealand,Oceania,high_income,coastline,-42,174,christian
+Oman,Asia,high_income,coastline,21,57,muslim
+Pakistan,Asia,lower_middle_income,coastline,30,70,muslim
+Panama,North America,high_income,coastline,8.9936,-79.51973,christian
+Pitcairn,NA,NA,coastline,-25.06667,-130.1,christian
+Peru,South America,upper_middle_income,coastline,-10,-75.25,christian
+Philippines,Asia,lower_middle_income,coastline,13,122,christian
+Palau,Oceania,high_income,coastline,7.503,134.621,christian
+Papua New Guinea,Oceania,lower_middle_income,coastline,-6,147,christian
+Poland,Europe,high_income,coastline,52,20,christian
+Puerto Rico,NA,high_income,coastline,18.46633,-66.10572,christian
+North Korea,Asia,low_income,coastline,40,127,NA
+Portugal,Europe,high_income,coastline,39.6945,-8.13057,christian
+Paraguay,South America,upper_middle_income,landlocked,-23.33333,-58,christian
+Palestine,NA,lower_middle_income,coastline,31.92157,35.20329,muslim
+Gaza Strip,NA,NA,NA,NA,NA,NA
+West Bank,NA,NA,NA,NA,NA,NA
+French Polynesia,NA,high_income,coastline,-15,-140,christian
+Qatar,Asia,high_income,coastline,25.27932,51.52245,muslim
+Reunion,NA,NA,coastline,-20.88231,55.4504,christian
+Romania,Europe,upper_middle_income,coastline,46,25,christian
+Russia,Europe,upper_middle_income,coastline,60,100,christian
+Russia,Asia,upper_middle_income,coastline,60,100,christian
+Rwanda,Africa,low_income,landlocked,-2,30,christian
+Saudi Arabia,Asia,high_income,coastline,25,45,muslim
+Serbia and Montenegro,NA,NA,coastline,NA,NA,NA
+Serbia excluding Kosovo,NA,NA,landlocked,NA,NA,NA
+Sudan,Africa,lower_middle_income,coastline,16,30,muslim
+Senegal,Africa,lower_middle_income,coastline,14.5,-14.25,muslim
+South Georgia and the South Sandwich Islands,NA,NA,NA,NA,NA,NA
+Singapore,Asia,high_income,coastline,1.28967,103.85007,eastern_religions
+St. Helena,NA,NA,coastline,-15.95,-5.7,christian
+Svalbard,NA,NA,coastline,78,20,NA
+Solomon Islands,Oceania,lower_middle_income,coastline,-8,159,christian
+Sierra Leone,Africa,low_income,coastline,8.5,-11.5,NA
+El Salvador,North America,lower_middle_income,coastline,13.83333,-88.91667,christian
+San Marino,Europe,high_income,landlocked,43.93667,12.44639,christian
+Somalia,Africa,low_income,coastline,6,48,muslim
+Somaliland,NA,NA,NA,NA,NA,NA
+South Ossetia,NA,NA,NA,NA,NA,NA
+St.-Pierre-et-Miquelon,NA,NA,coastline,46.83333,-56.33333,christian
+Serbia,Europe,upper_middle_income,landlocked,44.81892,20.45998,christian
+South Sudan,Africa,low_income,landlocked,7.5,30,NA
+St. Barthélemy,NA,NA,coastline,NA,NA,NA
+St. Martin,NA,NA,coastline,NA,NA,NA
+Sao Tome and Principe,Africa,lower_middle_income,coastline,1,7,christian
+Suriname,South America,upper_middle_income,coastline,4,-56,christian
+Slovak Republic,Europe,high_income,landlocked,48.66667,19.5,christian
+Slovenia,Europe,high_income,coastline,46.08333,15,christian
+Sweden,Europe,high_income,coastline,62,15,christian
+Eswatini,NA,lower_middle_income,landlocked,-26.5,31.5,christian
+Sint Maarten (Dutch part),NA,high_income,NA,18.04167,-63.06667,NA
+Seychelles,Africa,high_income,coastline,-4.58333,55.66667,christian
+Syria,Asia,low_income,coastline,35,38,muslim
+Turks and Caicos Islands,NA,high_income,coastline,21.73333,-71.58333,christian
+Chad,Africa,low_income,landlocked,15,19,muslim
+Togo,Africa,low_income,coastline,8.66667,1.08333,NA
+Thailand,Asia,upper_middle_income,coastline,15.5,101,eastern_religions
+Tajikistan,Asia,low_income,landlocked,39,71,muslim
+Tokelau,NA,NA,coastline,-9.167,-171.83,christian
+Turkmenistan,Asia,upper_middle_income,landlocked,39.75,59.66667,muslim
+Timor-Leste,Asia,lower_middle_income,coastline,-8.83333,125.75,christian
+Tonga,Oceania,upper_middle_income,coastline,-20,-175,christian
+Transnistria,NA,NA,NA,NA,NA,NA
+Trinidad and Tobago,North America,high_income,coastline,11,-61,christian
+Tunisia,Africa,lower_middle_income,coastline,34,9,muslim
+Turkey,Europe,upper_middle_income,coastline,39,35,muslim
+Turkey,Asia,upper_middle_income,coastline,39,35,muslim
+Tuvalu,Oceania,upper_middle_income,coastline,-8.51719,179.14478,christian
+Taiwan,NA,high_income,coastline,24,121,eastern_religions
+Tanzania,Africa,low_income,coastline,-6,35,christian
+Uganda,Africa,low_income,landlocked,1.25,32.5,christian
+Ukraine,Europe,lower_middle_income,coastline,49,32,christian
+Uruguay,South America,high_income,coastline,-33,-56,christian
+United States,North America,high_income,coastline,39.76,-98.5,christian
+US Minor Outlying Islands,NA,NA,NA,NA,NA,NA
+USSR,NA,NA,coastline,NA,NA,NA
+Uzbekistan,Asia,lower_middle_income,landlocked,41.66667,63.83333,muslim
+St. Vincent and the Grenadines,North America,upper_middle_income,coastline,13.08333,-61.2,christian
+Venezuela,South America,upper_middle_income,coastline,8,-66,christian
+British Virgin Islands,NA,high_income,coastline,18.5,-64.5,christian
+Virgin Islands (U.S.),NA,high_income,coastline,18.34829,-64.98348,christian
+Vietnam,Asia,lower_middle_income,coastline,16.16667,107.83333,eastern_religions
+Vanuatu,Oceania,lower_middle_income,coastline,-16,167,christian
+Wallis et Futuna,NA,NA,coastline,-13.3,-176.2,christian
+Samoa,Oceania,upper_middle_income,coastline,-13.8,-172.13333,christian
+Yemen,Asia,low_income,coastline,15.5,47.5,muslim
+North Yemen (former),NA,NA,coastline,NA,NA,NA
+South Yemen (former),NA,NA,coastline,NA,NA,NA
+Yugoslavia,NA,NA,coastline,NA,NA,NA
+South Africa,Africa,upper_middle_income,coastline,-29,24,christian
+Zambia,Africa,lower_middle_income,landlocked,-14.33333,28.5,christian
+Zimbabwe,Africa,lower_middle_income,landlocked,-19,29.75,christian
