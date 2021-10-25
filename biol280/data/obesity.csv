@@ -1,0 +1,193 @@
+country,obesity_rate,year,source
+Nauru,61,2018,CIA_worldfactbook
+Cook Islands,55.9,2018,CIA_worldfactbook
+Palau,55.3,2018,CIA_worldfactbook
+Marshall Islands,52.9,2018,CIA_worldfactbook
+Tuvalu,51.6,2018,CIA_worldfactbook
+Niue,50,2018,CIA_worldfactbook
+Tonga,48.2,2018,CIA_worldfactbook
+Samoa,47.3,2018,CIA_worldfactbook
+Kiribati,46,2018,CIA_worldfactbook
+"Micronesia, Federated States of",45.8,2018,CIA_worldfactbook
+Kuwait,37.9,2018,CIA_worldfactbook
+United States,36.2,2018,CIA_worldfactbook
+Jordan,35.5,2018,CIA_worldfactbook
+Saudi Arabia,35.4,2018,CIA_worldfactbook
+Qatar,35.1,2018,CIA_worldfactbook
+Libya,32.5,2018,CIA_worldfactbook
+Turkey,32.1,2018,CIA_worldfactbook
+Egypt,32,2018,CIA_worldfactbook
+Lebanon,32,2018,CIA_worldfactbook
+United Arab Emirates,31.7,2018,CIA_worldfactbook
+"Bahamas, The",31.6,2018,CIA_worldfactbook
+New Zealand,30.8,2018,CIA_worldfactbook
+Iraq,30.4,2018,CIA_worldfactbook
+Fiji,30.2,2018,CIA_worldfactbook
+Bahrain,29.8,2018,CIA_worldfactbook
+Canada,29.4,2018,CIA_worldfactbook
+Australia,29,2018,CIA_worldfactbook
+Malta,28.9,2018,CIA_worldfactbook
+Mexico,28.9,2018,CIA_worldfactbook
+South Africa,28.3,2018,CIA_worldfactbook
+Argentina,28.3,2018,CIA_worldfactbook
+Chile,28,2018,CIA_worldfactbook
+Dominica,27.9,2018,CIA_worldfactbook
+Uruguay,27.9,2018,CIA_worldfactbook
+Syria,27.8,2018,CIA_worldfactbook
+United Kingdom,27.8,2018,CIA_worldfactbook
+Dominican Republic,27.6,2018,CIA_worldfactbook
+Algeria,27.4,2018,CIA_worldfactbook
+Oman,27,2018,CIA_worldfactbook
+Tunisia,26.9,2018,CIA_worldfactbook
+Suriname,26.4,2018,CIA_worldfactbook
+Hungary,26.4,2018,CIA_worldfactbook
+Lithuania,26.3,2018,CIA_worldfactbook
+Morocco,26.1,2018,CIA_worldfactbook
+Israel,26.1,2018,CIA_worldfactbook
+Czechia,26,2018,CIA_worldfactbook
+Iran,25.8,2018,CIA_worldfactbook
+Costa Rica,25.7,2018,CIA_worldfactbook
+Andorra,25.6,2018,CIA_worldfactbook
+Venezuela,25.6,2018,CIA_worldfactbook
+Ireland,25.3,2018,CIA_worldfactbook
+Vanuatu,25.2,2018,CIA_worldfactbook
+Bulgaria,25,2018,CIA_worldfactbook
+Greece,24.9,2018,CIA_worldfactbook
+Jamaica,24.7,2018,CIA_worldfactbook
+Cuba,24.6,2018,CIA_worldfactbook
+El Salvador,24.6,2018,CIA_worldfactbook
+Belarus,24.5,2018,CIA_worldfactbook
+Croatia,24.4,2018,CIA_worldfactbook
+Belize,24.1,2018,CIA_worldfactbook
+Ukraine,24.1,2018,CIA_worldfactbook
+Spain,23.8,2018,CIA_worldfactbook
+Nicaragua,23.7,2018,CIA_worldfactbook
+Saint Vincent and the Grenadines,23.7,2018,CIA_worldfactbook
+Latvia,23.6,2018,CIA_worldfactbook
+Montenegro,23.3,2018,CIA_worldfactbook
+Norway,23.1,2018,CIA_worldfactbook
+Barbados,23.1,2018,CIA_worldfactbook
+Poland,23.1,2018,CIA_worldfactbook
+Russia,23.1,2018,CIA_worldfactbook
+Saint Kitts and Nevis,22.9,2018,CIA_worldfactbook
+Panama,22.7,2018,CIA_worldfactbook
+Haiti,22.7,2018,CIA_worldfactbook
+Luxembourg,22.6,2018,CIA_worldfactbook
+Solomon Islands,22.5,2018,CIA_worldfactbook
+Romania,22.5,2018,CIA_worldfactbook
+Macedonia,22.4,2018,CIA_worldfactbook
+Colombia,22.3,2018,CIA_worldfactbook
+Germany,22.3,2018,CIA_worldfactbook
+Finland,22.2,2018,CIA_worldfactbook
+Belgium,22.1,2018,CIA_worldfactbook
+Brazil,22.1,2018,CIA_worldfactbook
+Iceland,21.9,2018,CIA_worldfactbook
+Cyprus,21.8,2018,CIA_worldfactbook
+Albania,21.7,2018,CIA_worldfactbook
+Georgia,21.7,2018,CIA_worldfactbook
+France,21.6,2018,CIA_worldfactbook
+Serbia,21.5,2018,CIA_worldfactbook
+Honduras,21.4,2018,CIA_worldfactbook
+Grenada,21.3,2018,CIA_worldfactbook
+Papua New Guinea,21.3,2018,CIA_worldfactbook
+Estonia,21.2,2018,CIA_worldfactbook
+Guatemala,21.2,2018,CIA_worldfactbook
+Kazakhstan,21,2018,CIA_worldfactbook
+Portugal,20.8,2018,CIA_worldfactbook
+Mongolia,20.6,2018,CIA_worldfactbook
+Sweden,20.6,2018,CIA_worldfactbook
+Slovakia,20.5,2018,CIA_worldfactbook
+Netherlands,20.4,2018,CIA_worldfactbook
+Paraguay,20.3,2018,CIA_worldfactbook
+Guyana,20.2,2018,CIA_worldfactbook
+Slovenia,20.2,2018,CIA_worldfactbook
+Armenia,20.2,2018,CIA_worldfactbook
+Bolivia,20.2,2018,CIA_worldfactbook
+Austria,20.1,2018,CIA_worldfactbook
+Azerbaijan,19.9,2018,CIA_worldfactbook
+Italy,19.9,2018,CIA_worldfactbook
+Ecuador,19.9,2018,CIA_worldfactbook
+Peru,19.7,2018,CIA_worldfactbook
+Saint Lucia,19.7,2018,CIA_worldfactbook
+Denmark,19.7,2018,CIA_worldfactbook
+Switzerland,19.5,2018,CIA_worldfactbook
+Antigua and Barbuda,18.9,2018,CIA_worldfactbook
+Botswana,18.9,2018,CIA_worldfactbook
+Moldova,18.9,2018,CIA_worldfactbook
+Trinidad and Tobago,18.6,2018,CIA_worldfactbook
+Turkmenistan,18.6,2018,CIA_worldfactbook
+Bosnia and Herzegovina,17.9,2018,CIA_worldfactbook
+Namibia,17.2,2018,CIA_worldfactbook
+Yemen,17.1,2018,CIA_worldfactbook
+Kyrgyzstan,16.6,2018,CIA_worldfactbook
+Lesotho,16.6,2018,CIA_worldfactbook
+Uzbekistan,16.6,2018,CIA_worldfactbook
+Swaziland,16.5,2018,CIA_worldfactbook
+Malaysia,15.6,2018,CIA_worldfactbook
+Zimbabwe,15.5,2018,CIA_worldfactbook
+Gabon,15,2018,CIA_worldfactbook
+Tajikistan,14.2,2018,CIA_worldfactbook
+Brunei,14.1,2018,CIA_worldfactbook
+Seychelles,14,2018,CIA_worldfactbook
+Djibouti,13.5,2018,CIA_worldfactbook
+Mauritania,12.7,2018,CIA_worldfactbook
+Sao Tome and Principe,12.4,2018,CIA_worldfactbook
+Cabo Verde,11.8,2018,CIA_worldfactbook
+Cameroon,11.4,2018,CIA_worldfactbook
+Ghana,10.9,2018,CIA_worldfactbook
+Mauritius,10.8,2018,CIA_worldfactbook
+"Gambia, The",10.3,2018,CIA_worldfactbook
+Cote d'Ivoire,10.3,2018,CIA_worldfactbook
+Thailand,10,2018,CIA_worldfactbook
+Liberia,9.9,2018,CIA_worldfactbook
+Benin,9.6,2018,CIA_worldfactbook
+"Congo, Republic of the",9.6,2018,CIA_worldfactbook
+Guinea-Bissau,9.5,2018,CIA_worldfactbook
+Nigeria,8.9,2018,CIA_worldfactbook
+Senegal,8.8,2018,CIA_worldfactbook
+Sierra Leone,8.7,2018,CIA_worldfactbook
+Maldives,8.6,2018,CIA_worldfactbook
+Mali,8.6,2018,CIA_worldfactbook
+Pakistan,8.6,2018,CIA_worldfactbook
+Togo,8.4,2018,CIA_worldfactbook
+Tanzania,8.4,2018,CIA_worldfactbook
+Somalia,8.3,2018,CIA_worldfactbook
+Angola,8.2,2018,CIA_worldfactbook
+Zambia,8.1,2018,CIA_worldfactbook
+Equatorial Guinea,8,2018,CIA_worldfactbook
+Comoros,7.8,2018,CIA_worldfactbook
+Guinea,7.7,2018,CIA_worldfactbook
+Central African Republic,7.5,2018,CIA_worldfactbook
+Mozambique,7.2,2018,CIA_worldfactbook
+Kenya,7.1,2018,CIA_worldfactbook
+Indonesia,6.9,2018,CIA_worldfactbook
+"Korea, North",6.8,2018,CIA_worldfactbook
+"Congo, Democratic Republic of the",6.7,2018,CIA_worldfactbook
+Sudan,6.6,2018,CIA_worldfactbook
+South Sudan,6.6,2018,CIA_worldfactbook
+Bhutan,6.4,2018,CIA_worldfactbook
+Philippines,6.4,2018,CIA_worldfactbook
+China,6.2,2018,CIA_worldfactbook
+Singapore,6.1,2018,CIA_worldfactbook
+Chad,6.1,2018,CIA_worldfactbook
+Malawi,5.8,2018,CIA_worldfactbook
+Burma,5.8,2018,CIA_worldfactbook
+Rwanda,5.8,2018,CIA_worldfactbook
+Burkina Faso,5.6,2018,CIA_worldfactbook
+Niger,5.5,2018,CIA_worldfactbook
+Afghanistan,5.5,2018,CIA_worldfactbook
+Burundi,5.4,2018,CIA_worldfactbook
+Madagascar,5.3,2018,CIA_worldfactbook
+Laos,5.3,2018,CIA_worldfactbook
+Uganda,5.3,2018,CIA_worldfactbook
+Sri Lanka,5.2,2018,CIA_worldfactbook
+Eritrea,5,2018,CIA_worldfactbook
+"Korea, South",4.7,2018,CIA_worldfactbook
+Ethiopia,4.5,2018,CIA_worldfactbook
+Japan,4.3,2018,CIA_worldfactbook
+Nepal,4.1,2018,CIA_worldfactbook
+Cambodia,3.9,2018,CIA_worldfactbook
+India,3.9,2018,CIA_worldfactbook
+Timor-Leste,3.8,2018,CIA_worldfactbook
+Bangladesh,3.6,2018,CIA_worldfactbook
+Vietnam,2.1,2018,CIA_worldfactbook
