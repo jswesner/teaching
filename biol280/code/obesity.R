@@ -20,8 +20,6 @@ state_life_exp <- read_csv("biol280/data/state_life_exp.csv") %>%
   rename(state.abb = state_ab) %>% 
   left_join(state_convert)
 
-
-
 life_exp_obesity <- gapminder %>% left_join(obesity) %>% filter(year == 2007)
 state_life_exp_obesity <- state_obesity %>% left_join(state_life_exp)
 
@@ -32,18 +30,8 @@ write_csv(life_exp_obesity %>% select(country, lifeExp, obesity_rate),
 write_csv(state_life_exp_obesity, file = "biol280/data/state_life_exp_obesity.csv")
 
 
-life_exp_obesity %>% 
-  mutate(name = case_when(country == "United States" ~ "US",
-                          country == "China" ~ "China",
-                          country == "Zambia" ~ "Zambia")) %>% 
-  ggplot(aes(x = obesity_rate, y = lifeExp)) + 
-  geom_point() +
-  geom_text_repel(aes(label = name),
-                  nudge_x = -5,
-                  nudge_y = c(4, 0, 4)) +
-  geom_smooth(method = "lm") +
-  xlim(0, 40) +
-  ylim(40, 85)
+life_exp_obesity <- read_csv("https://raw.githubusercontent.com/jswesner/teaching/master/biol280/data/life_exp_obesity.csv")
+state_life_exp_obesity <- read_csv("https://raw.githubusercontent.com/jswesner/teaching/master/biol280/data/state_life_exp_obesity.csv")
 
 
 life_exp_obesity %>% 
@@ -99,8 +87,6 @@ life_exp_obesity %>%
   NULL
 
 
-
-
 life_exp_obesity %>% 
   mutate(name = case_when(country == "United States" ~ "US",
                           country == "China" ~ "China",
@@ -121,12 +107,35 @@ life_exp_obesity %>%
   geom_point(data = state_life_exp_obesity, aes(y = life_exp))
 
 
+life_exp_obesity %>% 
+  mutate(name = case_when(country == "United States" ~ "US",
+                          country == "China" ~ "China",
+                          country == "Zambia" ~ "Zambia"),
+         us = case_when(country == "United States" ~ "US")) %>% 
+  ggplot(aes(x = obesity_rate, y = lifeExp)) + 
+  geom_point(alpha = 0.1) +
+  geom_point(data = life_exp_obesity %>% filter(country == "United States"),
+             size = 5, color = "red") +
+  geom_text_repel(aes(label = name),
+                  nudge_x = c(0, -5, -2),
+                  nudge_y = c(4, 6, 4)) +
+  coord_cartesian(xlim= c(0, 40),
+                  ylim = c(40, 85)) +
+  labs(y = "Life Expectancy (years)",
+       x = "Obesity Rate (% of population)",
+       title = "Life Expectancy and Obesity Rates per Country") +
+  geom_smooth(method = "lm") +
+  geom_point(data = state_life_exp_obesity, aes(y = life_exp)) +
+  geom_smooth(method = "lm", 
+              data = state_life_exp_obesity, aes(y = life_exp))
+
 simpsons_paradox %>% 
-  filter(dataset == "simpson_1") %>% 
   ggplot(aes(x = x, y = y)) + 
   geom_point()
 
 simpsons_paradox %>% 
+  mutate(data= case_when(dataset == "simpson_1" ~ "Aggregated",
+                         TRUE ~ "Disaggregated")) %>% 
   ggplot(aes(x = x, y = y)) + 
-  geom_point(aes(color = dataset))
+  geom_point(aes(color = data))
 
