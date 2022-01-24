@@ -37,7 +37,7 @@ prior_and_x <- priors %>% expand_grid(x = x) %>%    # combine priors and x's
 prior_and_x %>% 
   ggplot(aes(x = x, y = mu, group = sim)) + 
   geom_line() +
-  geom_point(aes(y = y)) +
+  # geom_point(aes(y = y)) +
   labs(y = "sim")
 
 
@@ -63,6 +63,25 @@ gaus_brm <- brm(mpg ~ hp_c,
                           prior(exponential(1), class = "sigma")), 
                 cores = 4, chains = 1, iter = 1000,
                 file = "applied_bayesian_modeling/models/gaus_brm.rds")
+
+gaus_brm
+
+posteriors <- tibble(a = rnorm(N, 20.21, 0.72),
+                 b = rnorm(N, -0.07, 0.01),
+                 sigma = rexp(N, 0.28),
+                 sim = 1:N)
+
+posterior_and_x <- posteriors %>% expand_grid(x = x) %>%    # combine priors and x's
+  mutate(mu = a + b*x,                              # simulate regressions
+         y = rnorm(nrow(.), mu, sigma))             # simulate data (e.g., y_rep)
+
+
+posterior_and_x %>% 
+  filter(sim <= 20) %>% 
+  ggplot(aes(x = y)) + 
+  geom_histogram() + 
+  facet_wrap(~sim) +
+  geom_histogram(data = d %>% mutate(sim = "raw"), aes(x = mpg), fill = "blue")
 
 # gamma regression  -------
 
