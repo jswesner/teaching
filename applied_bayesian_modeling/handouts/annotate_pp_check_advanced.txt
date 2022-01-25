@@ -1,0 +1,51 @@
+#### BONUS #### (pp_check manually)
+# prepare the posteriors and data
+
+#1) extract posterior
+post <- as_draws_df(exp_brm_gaus) %>% 
+  mutate(iter = 1:nrow(.))
+
+
+
+
+#2) simulate n data points from the posterior
+y_rep <- post %>% 
+  mutate(a = b_Intercept,
+         b = b_Intercept + b_nameb) %>% 
+  select(iter, a, b, sigma) %>% 
+  pivot_longer(cols = c(-iter, -sigma), 
+               names_to = "name", 
+               values_to = "mean") %>% 
+  rowwise(iter, name) %>% 
+  summarize(value = rnorm(20, mean, sigma)) 
+
+
+
+
+#3) Add the raw data (so they can be plotted together)
+y_rep_raw <- y_rep %>% 
+  mutate(source = "y_rep") %>% #add an identifying column
+  bind_rows(data_exp %>%
+              mutate(source = "raw_data",  
+                     iter = 0)) 
+
+
+
+# pp_check(type = "hist)
+
+y_rep_raw %>% 
+  filter(iter <= 10) %>% # only the first n iterations
+  group_by(iter, name) %>% 
+  ggplot(aes(fill = source)) + 
+  geom_histogram(aes(x = value, group = name)) + 
+  facet_wrap(~iter) 
+
+
+
+# pp_check(type = "boxplot")
+
+y_rep_raw %>% 
+  filter(iter <= 10) %>% 
+  group_by(iter, name) %>% 
+  ggplot(aes(fill = source)) + 
+  geom_boxplot(aes(x = iter, y = value, group = iter)) 

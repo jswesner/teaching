@@ -6,7 +6,7 @@ library(tidybayes)
 library(gapminder)
 library(ggridges)
 library(ggthemes)
-
+library(ggrepel)
 
 
 # bayes citations ---------------------------------------------------------
@@ -182,44 +182,59 @@ ggsave(freq_bayes_plot, file = "plots/freq_bayes_plot.jpg", width = 5, height = 
 
 
 
+# toy priors --------------------------------------------------------------
+prior_toys <- tibble(norm = rnorm(n = 1000),
+                     unif = runif(n = 1000),
+                     exp = rexp(n = 1000)) %>% 
+  pivot_longer(cols = everything())
+
+
+prior_toys %>% 
+  ggplot(aes(x = value)) + 
+  stat_density() +
+  facet_wrap(~name) +
+  theme_void()
+
+
 # Plot prior, likelihood, posterior ---------------------------------------
 
-
+bayes_diff <- readRDS("applied_bayesian_modeling/models/bayes_diff.rds")
 post_bayesdiff <- as_draws_df(bayes_diff)
 
 mean_prior = 0
 sd_prior = 1000
 
-
 post_like <- post_bayesdiff %>% 
   rename(posterior_mean = b_Intercept) %>% 
   mutate(prior_mean = rnorm(nrow(.), mean = mean_prior, sd = sd_prior),
-         prior_mean_flat = runif(nrow(.), min = -100, max = 100),
-         likelihood_mean = rnorm(nrow(.), mean = freq_diff$coefficients[[1]], sd = sum_freq_diff$coefficients[[2]]))
-
-post_like %>% 
+         likelihood_mean = rnorm(nrow(.), mean = freq_diff$coefficients[[1]], 
+                                 sd = sum_freq_diff$coefficients[[2]])) %>% 
   pivot_longer(cols = contains("mean")) %>% 
-  filter(name != "prior_mean" & name != "prior_mean_flat") %>% 
-  ggplot(aes(x = value)) + 
-  stat_halfeye(aes(fill = name), 
-               alpha = 0.5, 
-               normalize = "groups") +
-  scale_fill_viridis_d() +
-  theme_default() +
-  geom_hline(yintercept = 0.25)
+  separate(name, c("name", "measure")) 
 
-
+colorblind_hex <- ggplot_build(ggplot(mtcars, aes(x = as.factor(cyl), y = hp, color = as.factor(cyl))) +
+                                 scale_color_colorblind())
+colorblind_hex_codes <- colorblind_hex$data %>% bind_rows() %>% distinct(colour) %>% pull()
 
 prior_data <- tibble(diff = rnorm(25, 0, 10)) %>% 
   mutate(source = "previous study") %>% 
   bind_rows(diff_gap %>% mutate(source = "this study"))
 
+prior_names <- tibble(name = c("likelihood", "prior", "posterior"),
+                      x = c(15, -10, 12),
+                      y = c(0.8, 0.20, 0.8)) 
+
 prior_le <- post_like %>% 
-  filter(name == "likelihood") %>% 
-  ggplot(aes(x = grid, y = value)) +
-  geom_line() +
-  coord_cartesian(xlim = c(-50, 50)) +
-  guides(color = "none") +
+  ggplot(aes(x = value)) + 
+  geom_density(data = . %>% filter(name == "likelihood"), 
+               aes(y = ..scaled..), color = "white") +
+  scale_fill_viridis_d() +
+  theme_default() +
+  # geom_hline(yintercept = 0.25) +
+  coord_cartesian(xlim = c(-40, 40)) +
+  geom_point(data = prior_data %>% filter(source != "previous study"), 
+             aes(x = diff, y = 0),
+             shape = 21) +
   theme_default() +
   theme(text = element_text(size = 25),
         axis.line.y = element_blank(),
@@ -227,15 +242,92 @@ prior_le <- post_like %>%
         axis.title.y = element_blank(),
         axis.ticks.y = element_blank()) +
   labs(x = "Change (years)") +
-  geom_point(data = prior_data %>% filter(source != "previous study"), 
-             aes(x = diff, y = 0))
+  scale_color_colorblind()  +
+  guides(color = "none")
 
-prior_le2 <- post_like %>% 
-  filter(name != "posterior") %>% 
-  ggplot(aes(x = grid, y = value)) +
-  geom_line(aes(color = name)) +
-  coord_cartesian(xlim = c(-50, 50)) +
-  guides(color = "none") +
+
+prior_le2 <- prior_le + 
+  geom_density(data = . %>% filter(name == "likelihood"), 
+               aes(y = ..scaled..)) +
+  geom_text_repel(data = prior_names %>% filter(name == "likelihood"), aes(x = x + 2, y = y, label = name, 
+                                          color = name),
+                  nudge_y = 0.06,
+                  nudge_x = 10) 
+
+prior_le3 <- prior_le + 
+  geom_density(data = . %>% filter(name == "likelihood"), 
+               aes(y = ..scaled..)) +
+  geom_hline(yintercept = 0.2, color = colorblind_hex_codes[3]) +
+  geom_text_repel(data = prior_names %>% filter(name != "posterior"), aes(x = x + 2, y = y, label = name, 
+                                                                           color = name),
+                  nudge_y = 0.06,
+                  nudge_x = c(10, 0)) +
+  scale_color_manual(values = c(colorblind_hex_codes[2], colorblind_hex_codes[3]))
+
+
+prior_le4 <- prior_le + 
+  geom_density(data = . %>% filter(name != "prior"), 
+               aes(y = ..scaled.., color = name)) +
+  geom_hline(yintercept = 0.2, color = colorblind_hex_codes[3]) +
+  geom_text_repel(data = prior_names,
+                  aes(x = x + 2, y = y, label = name,color = name),
+                  nudge_y = 0.06,
+                  nudge_x = c(10, 0, -10))
+
+prior_le4 +
+  # coord_cartesian(xlim = c(-100e1, 100e1)) +
+  geom_text_repel(data = prior_names, aes(x = x + 2, y = y, label = name, 
+                                          color = name),
+                  nudge_y = 0.06,
+                  nudge_x = c(-10, 0, 10)) +
+  guides(color = "none")
+
+
+ggsave(prior_le, file = "plots/prior_le.jpg", width = 7, height = 5)
+ggsave(prior_le2, file = "plots/prior_le2.jpg", width = 7, height = 5)
+ggsave(prior_le3, file = "plots/prior_le3.jpg", width = 7, height = 5)
+ggsave(prior_le4, file = "plots/prior_le4.jpg", width = 7, height = 5)
+
+
+# informed prior ----------------------------------------------------------
+bayes_diff_inf <- update(readRDS("applied_bayesian_modeling/models/bayes_diff.rds"),
+                     prior = c(prior(normal(-8, 5), class = "Intercept")))
+post_bayesdiff_inf <- as_draws_df(bayes_diff_inf)
+
+mean_prior = -8
+sd_prior = 5
+
+post_like_inf <- post_bayesdiff_inf %>% 
+  rename(posterior_mean = b_Intercept) %>% 
+  mutate(prior_mean = rnorm(nrow(.), mean = mean_prior, sd = sd_prior),
+         likelihood_mean = rnorm(nrow(.), mean = freq_diff$coefficients[[1]], 
+                                 sd = sum_freq_diff$coefficients[[2]])) %>% 
+  pivot_longer(cols = contains("mean")) %>% 
+  separate(name, c("name", "measure")) 
+
+colorblind_hex <- ggplot_build(ggplot(mtcars, aes(x = as.factor(cyl), y = hp, color = as.factor(cyl))) +
+                                 scale_color_colorblind())
+colorblind_hex_codes <- colorblind_hex$data %>% bind_rows() %>% distinct(colour) %>% pull()
+
+prior_data <- tibble(diff = rnorm(25, -8, 5)) %>% 
+  mutate(source = "previous study") %>% 
+  bind_rows(diff_gap %>% mutate(source = "this study"))
+
+prior_names <- tibble(name = c("likelihood", "prior", "posterior"),
+                      x = c(15, -8, 8),
+                      y = c(0.8, 0.8, 0.8)) 
+
+prior_le_inf <- post_like_inf %>% 
+  ggplot(aes(x = value)) + 
+  geom_density(data = . %>% filter(name == "likelihood"), 
+               aes(y = ..scaled..), color = "white") +
+  scale_fill_viridis_d() +
+  theme_default() +
+  # geom_hline(yintercept = 0.25) +
+  coord_cartesian(xlim = c(-40, 40)) +
+  geom_point(data = prior_data %>% filter(source != "previous study"), 
+             aes(x = diff, y = 0),
+             shape = 21) +
   theme_default() +
   theme(text = element_text(size = 25),
         axis.line.y = element_blank(),
@@ -243,16 +335,141 @@ prior_le2 <- post_like %>%
         axis.title.y = element_blank(),
         axis.ticks.y = element_blank()) +
   labs(x = "Change (years)") +
+  scale_color_colorblind()  +
+  guides(color = "none")
+
+
+prior_le2_inf <- prior_le_inf + 
+  geom_density(data = . %>% filter(name == "likelihood"), 
+               aes(y = ..scaled..)) +
+  geom_text_repel(data = prior_names %>% filter(name == "likelihood"), aes(x = x + 2, y = y, label = name, 
+                                                                           color = name),
+                  nudge_y = 0.06,
+                  nudge_x = 10) +
+  geom_point(data = prior_data %>% filter(source == "previous study"), 
+             aes(x = diff, y = 0), color = colorblind_hex_codes[3]) 
+
+prior_le3_inf <- prior_le_inf + 
+  geom_density(data = . %>% filter(name != "posterior"), 
+               aes(y = ..scaled.., color = name)) +
+  geom_text_repel(data = prior_names %>% filter(name != "posterior"), aes(x = x + 2, y = y, label = name, 
+                                                                          color = name),
+                  nudge_y = 0.06,
+                  nudge_x = c(10, 4)) +
+  scale_color_manual(values = c(colorblind_hex_codes[2], colorblind_hex_codes[3])) +
+  geom_point(data = prior_data %>% filter(source == "previous study"), 
+             aes(x = diff, y = 0), color = colorblind_hex_codes[3]) 
+
+
+
+prior_le4_inf <- prior_le_inf + 
+  geom_density(aes(y = ..scaled.., color = name)) +
+  geom_text_repel(data = prior_names,
+                  aes(x = x + 2, y = y, label = name,color = name),
+                  nudge_y = 0.06,
+                  nudge_x = c(10, 0, -10)) +
+  geom_point(data = prior_data %>% filter(source == "previous study"), 
+             aes(x = diff, y = 0), color = colorblind_hex_codes[3]) 
+
+
+
+ggsave(prior_le_inf, file = "plots/prior_le_inf.jpg", width = 7, height = 5)
+ggsave(prior_le2_inf, file = "plots/prior_le2_inf.jpg", width = 7, height = 5)
+ggsave(prior_le3_inf, file = "plots/prior_le3_inf.jpg", width = 7, height = 5)
+ggsave(prior_le4_inf, file = "plots/prior_le4_inf.jpg", width = 7, height = 5)
+
+
+# how to lie with a prior
+# informed prior ----------------------------------------------------------
+bayes_diff_inf <- update(readRDS("applied_bayesian_modeling/models/bayes_diff.rds"),
+                         prior = c(prior(normal(-8, 0.0001), class = 'Intercept')))
+post_bayesdiff_inf <- as_draws_df(bayes_diff_inf)
+
+bayes_diff_inf
+
+mean_prior = -8
+sd_prior = 0.001
+
+post_like_inf <- post_bayesdiff_inf %>% 
+  rename(posterior_mean = b_Intercept) %>% 
+  mutate(prior_mean = rnorm(nrow(.), mean = mean_prior, sd = sd_prior),
+         likelihood_mean = rnorm(nrow(.), mean = freq_diff$coefficients[[1]], 
+                                 sd = sum_freq_diff$coefficients[[2]])) %>% 
+  pivot_longer(cols = contains("mean")) %>% 
+  separate(name, c("name", "measure")) 
+
+colorblind_hex <- ggplot_build(ggplot(mtcars, aes(x = as.factor(cyl), y = hp, color = as.factor(cyl))) +
+                                 scale_color_colorblind())
+colorblind_hex_codes <- colorblind_hex$data %>% bind_rows() %>% distinct(colour) %>% pull()
+
+prior_data <- tibble(diff = rnorm(25, -8, 5)) %>% 
+  mutate(source = "previous study") %>% 
+  bind_rows(diff_gap %>% mutate(source = "this study"))
+
+prior_names <- tibble(name = c("likelihood", "prior", "posterior"),
+                      x = c(15, -8, 12),
+                      y = c(0.8, 0.8, 0.8)) 
+
+prior_le_inf <- post_like_inf %>% 
+  ggplot(aes(x = value)) + 
+  geom_density(data = . %>% filter(name == "likelihood"), 
+               aes(y = ..scaled..), color = "white") +
+  scale_fill_viridis_d() +
+  theme_default() +
+  # geom_hline(yintercept = 0.25) +
+  coord_cartesian(xlim = c(-40, 40)) +
   geom_point(data = prior_data %>% filter(source != "previous study"), 
-             aes(x = diff, y = 0))
+             aes(x = diff, y = 0),
+             shape = 21) +
+  theme_default() +
+  theme(text = element_text(size = 25),
+        axis.line.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  labs(x = "Change (years)") +
+  scale_color_colorblind()  +
+  guides(color = "none")
 
 
-ggsave(prior_le, file = "plots/prior_le.jpg", width = 6, height = 4)
-ggsave(prior_le2, file = "plots/prior_le2.jpg", width = 6, height = 4)
-ggsave(prior_le3, file = "plots/prior_le3.jpg", width = 6, height = 4)
-ggsave(prior_le4, file = "plots/prior_le4.jpg", width = 6, height = 4)
-ggsave(prior_le5, file = "plots/prior_le5.jpg", width = 6, height = 4)
+prior_le2_inf <- prior_le_inf + 
+  geom_density(data = . %>% filter(name == "likelihood"), 
+               aes(y = ..scaled..)) +
+  geom_text_repel(data = prior_names %>% filter(name == "likelihood"), aes(x = x + 2, y = y, label = name, 
+                                                                           color = name),
+                  nudge_y = 0.06,
+                  nudge_x = 10) +
+  geom_point(data = prior_data %>% filter(source == "previous study"), 
+             aes(x = diff, y = 0), color = colorblind_hex_codes[3]) 
 
+prior_le3_inf <- prior_le_inf + 
+  geom_density(data = . %>% filter(name != "posterior"), 
+               aes(y = ..scaled.., color = name)) +
+  geom_text_repel(data = prior_names %>% filter(name != "posterior"), aes(x = x + 2, y = y, label = name, 
+                                                                          color = name),
+                  nudge_y = 0.06,
+                  nudge_x = c(10, 4)) +
+  scale_color_manual(values = c(colorblind_hex_codes[2], colorblind_hex_codes[3])) +
+  geom_point(data = prior_data %>% filter(source == "previous study"), 
+             aes(x = diff, y = 0), color = colorblind_hex_codes[3]) 
+
+
+
+prior_le4_inf <- prior_le_inf + 
+  geom_density(aes(y = ..scaled.., color = name)) +
+  geom_text_repel(data = prior_names,
+                  aes(x = x + 2, y = y, label = name,color = name),
+                  nudge_y = 0.06,
+                  nudge_x = c(10, 0, -10)) +
+  geom_point(data = prior_data %>% filter(source == "previous study"), 
+             aes(x = diff, y = 0), color = colorblind_hex_codes[3]) 
+
+
+
+ggsave(prior_le_inf, file = "plots/prior_le_inf.jpg", width = 7, height = 5)
+ggsave(prior_le2_inf, file = "plots/prior_le2_inf.jpg", width = 7, height = 5)
+ggsave(prior_le3_inf, file = "plots/prior_le3_inf.jpg", width = 7, height = 5)
+ggsave(prior_le4_inf, file = "plots/prior_le4_inf.jpg", width = 7, height = 5)
 
 #  t-test freq vs bayes ---------------------------------------------------
 

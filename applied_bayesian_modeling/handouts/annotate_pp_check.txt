@@ -1,0 +1,33 @@
+# Annotate each part of this code (i.e., using a pen/pencil, briefly describe what 
+# each line of code does)
+
+# load packages
+library(tidyverse)
+library(brms)
+library(janitor)
+
+# simulate data
+set.seed(234234)
+
+data_exp <- tibble(a = rpois(20, 6),
+                   b = rpois(20, 1)) %>% 
+  pivot_longer(cols = everything())
+
+
+# fit model
+exp_brm_gaus <- brm(value ~ name, 
+                    family = gaussian(),
+                    data = data_exp, 
+                    chains = 4, 
+                    iter = 1000)
+
+# check chains
+plot(exp_brm_gaus)
+
+
+
+# check model fit
+pp_check(exp_brm_gaus, type = "hist")
+
+
+pp_check(exp_brm_gaus, type = "boxplot")

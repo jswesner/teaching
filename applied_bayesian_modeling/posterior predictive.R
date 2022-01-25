@@ -1,7 +1,6 @@
 # Model checking. 
 # load packages
 library(tidyverse)
-library(rethinking)
 library(brms)
 library(janitor)
 library(here)
@@ -35,8 +34,8 @@ exp_brm_poisson <- update(exp_brm_gaus,
                       newdata = data_exp,
                       file = "applied_bayesian_modeling/models/exp_brm_poisson.rds")
 
-pp_check(exp_brm_gaus, type = "stat_grouped", group = "name")
-pp_check(exp_brm_poisson, type = "stat_grouped", group = "name") + scale_x_log10()
+pp_check(exp_brm_gaus, type = "hist")
+pp_check(exp_brm_gaus, type = "boxplot")
 
 
 
@@ -44,27 +43,29 @@ pp_check(exp_brm_poisson, type = "stat_grouped", group = "name") + scale_x_log10
 
 # prepare the posteriors and data
 #1) extract posterior
-post <- as_draws_df(exp_brm_poisson) %>% 
+post <- as_draws_df(exp_brm_gaus) %>% 
   mutate(iter = 1:nrow(.))
 
 #2) simulate n datapoints from the posterior
 y_rep <- post %>% 
   mutate(a = b_Intercept,
          b = b_Intercept + b_nameb) %>% 
-  select(iter, a, b) %>% 
-  pivot_longer(cols = c(-iter), names_to = "name", values_to = "mean") %>% 
-  rowwise(iter, name) %>%  # prepare R to summarize by these groups (iter and group)
-  summarize(value = rpois(20, exp(mean))) # for each iteration and group, simulate 20 data points
+  select(iter, a, b, sigma) %>% 
+  pivot_longer(cols = c(-iter, -sigma), 
+               names_to = "name", 
+               values_to = "mean") %>% 
+  rowwise(iter, name) %>%  # prepare R to summarize by these groups (iter and name)
+  summarize(value = rnorm(20, mean, sigma)) # for each iteration and group, simulate 20 data points
 
 #3) Add the raw data (so they can be plotted together)
-y_rep_raw <- y_rep %>% mutate(source = "y_rep") %>% #add an identifying column
+y_rep_raw <- y_rep %>% 
+  mutate(source = "y_rep") %>% #add an identifying column
   bind_rows(data_exp %>%
               mutate(source = "raw_data",   #add an identifier to raw data then combine
                      iter = 0)) 
 
-
-# now plot
 # pp_check(type = "hist)
+
 y_rep_raw %>% 
   filter(iter <= 10) %>% # only the first n iterations
   group_by(iter, name) %>% 
