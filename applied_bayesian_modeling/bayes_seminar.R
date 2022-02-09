@@ -7,6 +7,38 @@ library(gapminder)
 library(ggridges)
 library(ggthemes)
 library(ggrepel)
+library(gganimate)
+library(here)
+
+
+# Why statistics? ---------------------------------------------------------
+set.seed(234234)
+a_cloud <- tibble(x = rnorm(10000),
+       y = rnorm(10000)) %>% 
+  mutate(id = 1:nrow(.),
+         color = case_when(id <= 10 ~ "data_we_have",
+                         TRUE ~ "a_question")) %>% 
+  ggplot(aes(x = x, y = y, alpha = color, size = color)) +
+  scale_alpha_manual(values = c(0.006, 1)) + 
+  geom_point(size = 1) +
+  guides(alpha = "none",
+         size = "none") +
+  theme_void()
+
+set.seed(234234)
+b_cloud <- tibble(x = rnorm(10000),
+                  y = rnorm(10000)) %>% 
+  mutate(id = 1:nrow(.),
+         color = case_when(id <= 10 ~ "data_we_have",
+                           TRUE ~ "a_question")) %>% 
+  ggplot(aes(x = x, y = y)) +
+  geom_point(size = 1) +
+  guides(alpha = "none",
+         size = "none") +
+  theme_void()
+
+ggsave(a_cloud, file = "plots/a_cloud.jpg", width = 5, height = 5)
+ggsave(b_cloud, file = "plots/b_cloud.jpg", width = 5, height = 5)
 
 
 # bayes citations ---------------------------------------------------------
@@ -142,11 +174,14 @@ confint(freq_diff)
 
 get_prior(diff ~ 1, data = diff_gap, family = gaussian())
 
-bayes_diff <- brm(diff ~ 1, data = diff_gap, family = gaussian(),
-                  prior = c(prior(normal(0, 1000), class = "Intercept"),
-                            prior(exponential(0.1), class = "sigma")),
-                  file_refit = "on_change",
-                  file = "applied_bayesian_modeling/models/bayes_diff.rds")
+bayes_diff <- readRDS("applied_bayesian_modeling/models/bayes_diff.rds")
+
+# 
+# bayes_diff <- brm(diff ~ 1, data = diff_gap, family = gaussian(),
+#                   prior = c(prior(normal(0, 1000), class = "Intercept"),
+#                             prior(exponential(0.1), class = "sigma")),
+#                   file_refit = "on_change",
+#                   file = "applied_bayesian_modeling/models/bayes_diff.rds")
 
 sum_bayes_diff <- summary(bayes_diff)
 
@@ -170,8 +205,7 @@ library(ggrepel)
 freq_bayes_plot <- le_diff +
   geom_pointrange(data = freq_bayes_means, 
                   aes(ymin = lower, ymax = upper, y = mean, x = x, color = method),
-                  position = position_dodge(width = 0.4),
-                  size = 1.5) +
+                  position = position_dodge(width = 0.4)) +
   geom_text(data = freq_bayes_means, aes(x = x*2,
                                          y = 22, label = method),
             size = 5) +
@@ -223,6 +257,28 @@ prior_data <- tibble(diff = rnorm(25, 0, 10)) %>%
 prior_names <- tibble(name = c("likelihood", "prior", "posterior"),
                       x = c(15, -10, 12),
                       y = c(0.8, 0.20, 0.8)) 
+
+
+prior_blank <- post_like %>% 
+  ggplot(aes(x = value)) + 
+  geom_density(data = . %>% filter(name == "likelihood"), 
+               aes(y = ..scaled..), color = "white") +
+  scale_fill_viridis_d() +
+  theme_default() +
+  # geom_hline(yintercept = 0.25) +
+  coord_cartesian(xlim = c(-40, 40)) +
+  # geom_point(data = prior_data %>% filter(source != "previous study"), 
+  #            aes(x = diff, y = 0),
+  #            shape = 21) +
+  theme_default() +
+  theme(text = element_text(size = 25),
+        axis.line.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  labs(x = "Change (years)") +
+  scale_color_colorblind()  +
+  guides(color = "none")
 
 prior_le <- post_like %>% 
   ggplot(aes(x = value)) + 
@@ -291,11 +347,11 @@ ggsave(prior_le4, file = "plots/prior_le4.jpg", width = 7, height = 5)
 
 # informed prior ----------------------------------------------------------
 bayes_diff_inf <- update(readRDS("applied_bayesian_modeling/models/bayes_diff.rds"),
-                     prior = c(prior(normal(-8, 5), class = "Intercept")))
+                     prior = c(prior(normal(0, 3), class = "Intercept")))
 post_bayesdiff_inf <- as_draws_df(bayes_diff_inf)
 
-mean_prior = -8
-sd_prior = 5
+mean_prior = 0
+sd_prior = 3
 
 post_like_inf <- post_bayesdiff_inf %>% 
   rename(posterior_mean = b_Intercept) %>% 
@@ -309,25 +365,26 @@ colorblind_hex <- ggplot_build(ggplot(mtcars, aes(x = as.factor(cyl), y = hp, co
                                  scale_color_colorblind())
 colorblind_hex_codes <- colorblind_hex$data %>% bind_rows() %>% distinct(colour) %>% pull()
 
-prior_data <- tibble(diff = rnorm(25, -8, 5)) %>% 
+prior_data <- tibble(diff = rnorm(25, 0, 3)) %>% 
   mutate(source = "previous study") %>% 
   bind_rows(diff_gap %>% mutate(source = "this study"))
 
 prior_names <- tibble(name = c("likelihood", "prior", "posterior"),
-                      x = c(15, -8, 8),
+                      x = c(15, -0, 8),
                       y = c(0.8, 0.8, 0.8)) 
 
 prior_le_inf <- post_like_inf %>% 
   ggplot(aes(x = value)) + 
-  geom_density(data = . %>% filter(name == "likelihood"), 
-               aes(y = ..scaled..), color = "white") +
+  geom_density(data = . %>% filter(name == "prior"), 
+               aes(y = ..scaled..), color = colorblind_hex_codes[3]) +
   scale_fill_viridis_d() +
   theme_default() +
   # geom_hline(yintercept = 0.25) +
   coord_cartesian(xlim = c(-40, 40)) +
-  geom_point(data = prior_data %>% filter(source != "previous study"), 
-             aes(x = diff, y = 0),
-             shape = 21) +
+  # geom_point(data = prior_data %>% filter(source == "previous study"),
+  #            aes(x = diff, y = 0),
+  #            shape = 21,
+  #            color = colorblind_hex_codes[3]) +
   theme_default() +
   theme(text = element_text(size = 25),
         axis.line.y = element_blank(),
@@ -336,91 +393,41 @@ prior_le_inf <- post_like_inf %>%
         axis.ticks.y = element_blank()) +
   labs(x = "Change (years)") +
   scale_color_colorblind()  +
-  guides(color = "none")
+  guides(color = "none") +
+  geom_text_repel(data = prior_names %>% filter(name == "prior"), 
+                  aes(x = x + 2, y = y, label = name), 
+                  color = colorblind_hex_codes[3],
+                  nudge_y = 0.06,
+                  nudge_x = 4) 
 
 
 prior_le2_inf <- prior_le_inf + 
   geom_density(data = . %>% filter(name == "likelihood"), 
                aes(y = ..scaled..)) +
-  geom_text_repel(data = prior_names %>% filter(name == "likelihood"), aes(x = x + 2, y = y, label = name, 
+  geom_text(data = prior_names %>% filter(name == "likelihood"), aes(x = x, y = y, label = name, 
                                                                            color = name),
                   nudge_y = 0.06,
-                  nudge_x = 10) +
-  geom_point(data = prior_data %>% filter(source == "previous study"), 
-             aes(x = diff, y = 0), color = colorblind_hex_codes[3]) 
+                  nudge_x = 7)  
 
 prior_le3_inf <- prior_le_inf + 
-  geom_density(data = . %>% filter(name != "posterior"), 
-               aes(y = ..scaled.., color = name)) +
-  geom_text_repel(data = prior_names %>% filter(name != "posterior"), aes(x = x + 2, y = y, label = name, 
-                                                                          color = name),
-                  nudge_y = 0.06,
-                  nudge_x = c(10, 4)) +
-  scale_color_manual(values = c(colorblind_hex_codes[2], colorblind_hex_codes[3])) +
-  geom_point(data = prior_data %>% filter(source == "previous study"), 
-             aes(x = diff, y = 0), color = colorblind_hex_codes[3]) 
-
-
-
-prior_le4_inf <- prior_le_inf + 
   geom_density(aes(y = ..scaled.., color = name)) +
-  geom_text_repel(data = prior_names,
-                  aes(x = x + 2, y = y, label = name,color = name),
-                  nudge_y = 0.06,
-                  nudge_x = c(10, 0, -10)) +
-  geom_point(data = prior_data %>% filter(source == "previous study"), 
-             aes(x = diff, y = 0), color = colorblind_hex_codes[3]) 
+  geom_text(data = prior_names %>% 
+                    filter(name != "prior"),
+                  aes(x = x + 7, y = y, label = name,color = name))
 
 
-
-ggsave(prior_le_inf, file = "plots/prior_le_inf.jpg", width = 7, height = 5)
-ggsave(prior_le2_inf, file = "plots/prior_le2_inf.jpg", width = 7, height = 5)
-ggsave(prior_le3_inf, file = "plots/prior_le3_inf.jpg", width = 7, height = 5)
-ggsave(prior_le4_inf, file = "plots/prior_le4_inf.jpg", width = 7, height = 5)
-
-
-# how to lie with a prior
-# informed prior ----------------------------------------------------------
-bayes_diff_inf <- update(readRDS("applied_bayesian_modeling/models/bayes_diff.rds"),
-                         prior = c(prior(normal(-8, 0.0001), class = 'Intercept')))
-post_bayesdiff_inf <- as_draws_df(bayes_diff_inf)
-
-bayes_diff_inf
-
-mean_prior = -8
-sd_prior = 0.001
-
-post_like_inf <- post_bayesdiff_inf %>% 
-  rename(posterior_mean = b_Intercept) %>% 
-  mutate(prior_mean = rnorm(nrow(.), mean = mean_prior, sd = sd_prior),
-         likelihood_mean = rnorm(nrow(.), mean = freq_diff$coefficients[[1]], 
-                                 sd = sum_freq_diff$coefficients[[2]])) %>% 
-  pivot_longer(cols = contains("mean")) %>% 
-  separate(name, c("name", "measure")) 
-
-colorblind_hex <- ggplot_build(ggplot(mtcars, aes(x = as.factor(cyl), y = hp, color = as.factor(cyl))) +
-                                 scale_color_colorblind())
-colorblind_hex_codes <- colorblind_hex$data %>% bind_rows() %>% distinct(colour) %>% pull()
-
-prior_data <- tibble(diff = rnorm(25, -8, 5)) %>% 
-  mutate(source = "previous study") %>% 
-  bind_rows(diff_gap %>% mutate(source = "this study"))
-
-prior_names <- tibble(name = c("likelihood", "prior", "posterior"),
-                      x = c(15, -8, 12),
-                      y = c(0.8, 0.8, 0.8)) 
-
-prior_le_inf <- post_like_inf %>% 
+prior_le4_inf <- post_like_inf %>% 
   ggplot(aes(x = value)) + 
-  geom_density(data = . %>% filter(name == "likelihood"), 
-               aes(y = ..scaled..), color = "white") +
+  geom_density(data = . %>% filter(name == "posterior"), 
+               aes(y = ..scaled..), color = colorblind_hex_codes[1]) +
   scale_fill_viridis_d() +
   theme_default() +
   # geom_hline(yintercept = 0.25) +
   coord_cartesian(xlim = c(-40, 40)) +
-  geom_point(data = prior_data %>% filter(source != "previous study"), 
-             aes(x = diff, y = 0),
-             shape = 21) +
+  # geom_point(data = prior_data %>% filter(source == "previous study"),
+  #            aes(x = diff, y = 0),
+  #            shape = 21,
+  #            color = colorblind_hex_codes[3]) +
   theme_default() +
   theme(text = element_text(size = 25),
         axis.line.y = element_blank(),
@@ -429,47 +436,454 @@ prior_le_inf <- post_like_inf %>%
         axis.ticks.y = element_blank()) +
   labs(x = "Change (years)") +
   scale_color_colorblind()  +
-  guides(color = "none")
-
-
-prior_le2_inf <- prior_le_inf + 
-  geom_density(data = . %>% filter(name == "likelihood"), 
-               aes(y = ..scaled..)) +
-  geom_text_repel(data = prior_names %>% filter(name == "likelihood"), aes(x = x + 2, y = y, label = name, 
-                                                                           color = name),
+  guides(color = "none") +
+  geom_text(data = prior_names %>% filter(name == "posterior"), 
+                  aes(x = x + 2, y = y, label = name), 
+                  color = colorblind_hex_codes[1],
                   nudge_y = 0.06,
-                  nudge_x = 10) +
-  geom_point(data = prior_data %>% filter(source == "previous study"), 
-             aes(x = diff, y = 0), color = colorblind_hex_codes[3]) 
+                  nudge_x = 4) 
 
-prior_le3_inf <- prior_le_inf + 
-  geom_density(data = . %>% filter(name != "posterior"), 
-               aes(y = ..scaled.., color = name)) +
-  geom_text_repel(data = prior_names %>% filter(name != "posterior"), aes(x = x + 2, y = y, label = name, 
-                                                                          color = name),
+
+prior_le5_inf <- post_like_inf %>% 
+  ggplot(aes(x = value)) + 
+  geom_density(data = . %>% filter(name == "posterior"), 
+               aes(y = ..scaled..), color = colorblind_hex_codes[3]) +
+  scale_fill_viridis_d() +
+  theme_default() +
+  # geom_hline(yintercept = 0.25) +
+  coord_cartesian(xlim = c(-40, 40)) +
+  # geom_point(data = prior_data %>% filter(source == "previous study"),
+  #            aes(x = diff, y = 0),
+  #            shape = 21,
+  #            color = colorblind_hex_codes[3]) +
+  theme_default() +
+  theme(text = element_text(size = 25),
+        axis.line.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  labs(x = "Change (years)") +
+  scale_color_colorblind()  +
+  guides(color = "none") +
+  geom_text(data = prior_names %>% filter(name == "prior"), 
+                  aes(x = x + 2, y = y, label = "new prior"), 
+                  color = colorblind_hex_codes[3],
                   nudge_y = 0.06,
-                  nudge_x = c(10, 4)) +
-  scale_color_manual(values = c(colorblind_hex_codes[2], colorblind_hex_codes[3])) +
-  geom_point(data = prior_data %>% filter(source == "previous study"), 
-             aes(x = diff, y = 0), color = colorblind_hex_codes[3]) 
-
-
-
-prior_le4_inf <- prior_le_inf + 
-  geom_density(aes(y = ..scaled.., color = name)) +
-  geom_text_repel(data = prior_names,
-                  aes(x = x + 2, y = y, label = name,color = name),
-                  nudge_y = 0.06,
-                  nudge_x = c(10, 0, -10)) +
-  geom_point(data = prior_data %>% filter(source == "previous study"), 
-             aes(x = diff, y = 0), color = colorblind_hex_codes[3]) 
-
+                  nudge_x = 10) 
 
 
 ggsave(prior_le_inf, file = "plots/prior_le_inf.jpg", width = 7, height = 5)
 ggsave(prior_le2_inf, file = "plots/prior_le2_inf.jpg", width = 7, height = 5)
 ggsave(prior_le3_inf, file = "plots/prior_le3_inf.jpg", width = 7, height = 5)
 ggsave(prior_le4_inf, file = "plots/prior_le4_inf.jpg", width = 7, height = 5)
+ggsave(prior_le5_inf, file = "plots/prior_le5_inf.jpg", width = 7, height = 5)
+
+
+
+# outliers ----------------------------------------------------------------
+tibble(x = seq(-1,1, length.out = 100)) %>% 
+  mutate(ypred = rnorm(nrow(.), exp(x), 0.1)) %>% 
+  add_row(x = -0.5, ypred = 2.5) %>% 
+  ggplot(aes(x = x, y = ypred)) +
+  geom_point() +
+  theme_void() +
+  theme(axis.line = element_line())
+
+
+
+
+# Simulate from prior -----------------------------------------------------
+pointsims <- tibble(x = rnorm(25))
+
+tibble(x = rnorm(1000)) %>% 
+  ggplot(aes(x = x, y = 0.5)) +
+  geom_density_ridges() + 
+  ylim(0,2) +
+  xlim(-6,6) +
+  geom_point(data = pointsims,
+                           aes(y = 0)) +
+  geom_segment(data = pointsims, aes(y = 0.1, yend = 0.4,
+                                     x = x, xend = x),
+               alpha = 1) +
+  theme_void() +
+  theme(axis.text = element_blank()) +
+  coord_flip()
+
+# beautiful daughters ---------------------------------------------------
+bd_data <- tibble(likelihood = rnorm(3000, 0.8, 0.033))
+
+sex_ratio_wikipedia <- read_csv("applied_bayesian_modeling/data/sex_ratio_wikipedia.csv") %>% 
+  mutate(sex_ratio = as.numeric(sex_ratio),
+         value = 1 -sex_ratio/(1 + sex_ratio),
+         name = "all countries")
+
+sex_ratio_dist = tibble(value = rnorm(5000, mean = mean(sex_ratio_wikipedia$value, na.rm = T),
+                                      sd = sd(sex_ratio_wikipedia$value,  na.rm = T)),
+                        name = "beautiful")
+
+males = 0.54
+100*males/(1-males)
+
+beautiful <- tibble(not_beautiful = mean(sex_ratio_wikipedia$value, na.rm = T)) %>% 
+  mutate(beautiful = .55) %>% 
+  pivot_longer(cols = everything()) %>% 
+  # mutate(name = fct_relevel(name, "not_beautiful")) %>% 
+  ggplot(aes(y = name, x = value)) +
+  geom_jitter(data = sex_ratio_wikipedia, height = 0.041,
+              width = 0, shape = 21) +
+  geom_point() +
+  geom_segment(aes(xend = value, x = 0, y = name, yend = name)) +
+  labs(x = "Proportion of female children",
+       y = "Beauty of the parents") +
+  coord_cartesian(xlim = c(0.4, 0.6)) +
+  theme_default() +
+  theme(text = element_text(size = 20)) 
+
+beautiful_2 = beautiful + stat_halfeye(data = sex_ratio_dist) 
+
+ggsave(beautiful, file = "plots/beautiful.jpg", width = 8, height = 6)
+ggsave(beautiful_2, file = "plots/beautiful_2.jpg", width = 8, height = 6)
+
+
+
+# animate densities -------------------------------------------------------
+
+sampled_data <- data.frame(mean = 0,
+                           sd = seq(10, 50, length.out = 10))
+                             
+n = 10000
+
+plot_df <- sampled_data %>% 
+  # arrange(-sd) %>% 
+  uncount(n) %>% 
+  mutate(value = rnorm(n(), mean, sd))
+
+plot_df %>% 
+  filter(sd == 1) %>% 
+  ggplot(aes(x = value)) +
+  # geom_dots() +
+  stat_slab(alpha = 0.8) +
+  stat_dotsinterval(side = "bottom", scale = 1, position = "dodge",
+                    alpha = 1) +
+  theme_void()
+
+
+uniform_plot <- tibble(value = runif(250000, -40, 40)) %>% 
+  ggplot(aes(x = value)) + 
+  scale_fill_viridis_d() +
+  theme_default() +
+  # geom_hline(yintercept = 0.25) +
+  # coord_cartesian(xlim = c(-40, 40)) +
+  # geom_point(data = prior_data %>% filter(source != "previous study"), 
+  #            aes(x = diff, y = 0),
+  #            shape = 21) +
+  theme_default() +
+  theme(text = element_text(size = 25),
+        axis.line.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  labs(x = "Change (years)") +
+  scale_color_colorblind()  +
+  guides(color = "none") +
+  stat_slab(alpha = 0.4) +
+  stat_dots(data = tibble(value = runif(2500, -40, 40)),
+            side = "bottom", scale = 1, position = "dodge",
+                    alpha = 1) 
+
+
+ggsave(uniform_plot, file = "plots/uniform.jpg",
+       width = 7, height = 6)
+
+uniform_plot_wide <- tibble(value = runif(250000, -1e6, 1e6)) %>% 
+  ggplot(aes(x = value)) + 
+  scale_fill_viridis_d() +
+  theme_default() +
+  # geom_hline(yintercept = 0.25) +
+  # coord_cartesian(xlim = c(-40, 40)) +
+  # geom_point(data = prior_data %>% filter(source != "previous study"), 
+  #            aes(x = diff, y = 0),
+  #            shape = 21) +
+  theme_default() +
+  theme(text = element_text(size = 25),
+        axis.line.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  labs(x = "Change (years)") +
+  scale_color_colorblind()  +
+  guides(color = "none") +
+  stat_slab(alpha = 0.4) +
+  stat_dots(data = tibble(value = runif(2500, -1e6, 1e6)),
+            side = "bottom", scale = 1, position = "dodge",
+            alpha = 1) 
+
+ggsave(uniform_plot_wide, file = "plots/uniform_wide.jpg",
+       width = 7, height = 6)
+
+
+test <- plot_df %>%
+  arrange(-sd) %>% 
+  mutate(sd = as.integer(sd)) %>% 
+  ggplot(aes(x=value)) +
+  # stat_halfeye(aes(fill = sd), normalize = "panels") +
+  geom_density(aes(y = ..scaled..), alpha = 1) +
+  geom_boxplot(aes(group = sd),
+               width = 0.1, outlier.shape = NA) +
+  guides(fill = "none") +
+  theme_void() +
+  coord_cartesian(xlim = c(-100, 100)) +
+  theme(text = element_text(size = 20),
+        axis.text.x = element_text(),
+        axis.line.x = element_line(),
+        axis.ticks.x = element_line()) +
+  transition_time(sd) +
+  labs(title = 'N(mean = 0, sd = {frame_time})',
+       y = "Prior probability: P(H)") 
+
+anim_save("plots/density_gif.gif", test)
+
+
+# meta-analysis -----------------------------------------------------------
+fake_meta <- tibble(mean = rnorm(12, 0, 0.5),
+       sd = runif(12, 0.1, 0.3)) %>%
+  expand_grid(sims = 1:10000) %>% 
+  mutate(y = rnorm(nrow(.), mean, sd))
+
+fake_meta %>% 
+  ggplot(aes(x = y, group = mean)) + 
+  geom_density(aes(fill = mean, y = ..scaled..)) +
+  guides(fill = "none") +
+  theme_void() 
+
+
+# animate simulations --------------------------------------------------------------
+
+sims = 100
+
+sim_mean <- tibble(intercept = rnorm(sims, 0, 1),
+                     beta = rnorm(sims, 0, 1),
+                     sigma = rexp(sims, 0.1),
+                     sim = 1:sims) %>% 
+  expand_grid(log_predator = seq(-20, 20, by = 2)) %>% 
+  mutate(log_pred = intercept + beta*log_predator)
+
+sim_yrep <- sim_mean %>%
+  uncount(sims, .id = "id") %>% 
+  mutate(log_pred_y = rnorm(nrow(.), log_pred, sigma))
+
+library(scales)
+prior_pred_yrep <- sim_yrep %>% 
+  filter(sim <= 10) %>% 
+  # filter(log_predator == 10) %>% 
+  ggplot(aes(x = log_predator, y = log_pred_y)) + 
+  geom_point(shape = 21) +
+  theme_default() +
+  labs(x = "Predator size log(g)",
+       y = "Prey size log(g)",
+       subtitle = "Prior predictive distribution",
+       caption = "Wesner & Pomeranz. 2021. Ecosphere, 12(9)") +
+  theme(text = element_text(size = 21)) +
+  scale_y_continuous(label = comma)
+
+ggsave(prior_pred_yrep, file = "plots/prior_pred_yrep.jpg", width = 8, height = 6)
+
+
+
+
+# Prior Predictive --------------------------------------------------------
+# read data from Brose et al. 2006
+d <- read.csv(here("applied_bayesian_modeling/data/pred-prey-mass.csv"))
+set.seed(1095)
+N <- 100 # number of simulations
+fake_data <- tibble(a = rnorm(N, 0, 1000), 
+                    b = rnorm(N, 0, 1000),
+                    a2 = rnorm(N, 0, 10),
+                    b2 = rnorm(N, 0, 10),
+                    a3 = rnorm(N, 0, 1),
+                    b3 = rnorm(N, 0, 1),
+                    sig1 = 0.0001,
+                    sig2 = 0.01,
+                    sig3 = 0.5,
+                    sim = 1:N) %>%  
+  expand_grid(log_pred_mass = seq(from = min(d$log_pred), to = max(d$log_pred), length.out = 20)) %>% 
+  mutate(musims_1 = a + b*log_pred_mass, # simulate means
+         logpreymasssims_1 = musims_1 + rnorm(nrow(.), 0, rexp(nrow(.), min(sig1))), # simulate new data
+         musims_2 = a2 + b2*log_pred_mass,
+         logpreymasssims_2 = musims_2 + rnorm(nrow(.), 0, rexp(nrow(.), min(sig2))),
+         musims_3 = a3 + b3*log_pred_mass,
+         logpreymasssims_3 = musims_3 + rnorm(nrow(.), 0, rexp(nrow(.), min(sig3)))) %>% 
+  pivot_longer(cols = c(musims_1, logpreymasssims_1, musims_2, logpreymasssims_2,
+                        musims_3, logpreymasssims_3)) %>% 
+  separate(name, c("response", "model")) %>% 
+  mutate(model = case_when(model == 1 ~ "a",
+                           model == 2 ~ "b",
+                           TRUE ~ "c"))
+
+pred_prey_data <- d %>% 
+  ggplot(aes(x = log_pred, y = log_prey)) + 
+  geom_point(size = 0.1, shape =21) +
+  labs(title = "",
+       y = "Prey Mass log(g)",
+       x = "Predator Mass log(g)") +
+  theme_default() +
+  theme(text = element_text(size = 20)) +
+  ylim(-40, 30)
+
+pred_prey_data_line <- d %>% 
+  ggplot(aes(x = log_pred, y = log_prey)) + 
+  geom_point(size = 0.1, shape =21) +
+  labs(title = "",
+       y = "Prey Mass log(g)",
+       x = "Predator Mass log(g)") +
+  theme_default() +
+  geom_smooth(method = "lm") +
+  theme(text = element_text(size = 20)) +
+  ylim(-40, 30)
+
+pred_prey_data_line_only <- d %>% 
+  ggplot(aes(x = log_pred, y = log_prey)) + 
+  # geom_point(size = 0.1, shape =21) +
+  labs(title = "",
+       y = "Prey Mass log(g)",
+       x = "Predator Mass log(g)") +
+  theme_default() +
+  geom_smooth(method = "lm") +
+  theme(text = element_text(size = 20)) +
+  ylim(-40, 30)
+
+pred_prey_sim1 <- fake_data %>% 
+  filter(response != "logpreymasssims" & 
+           model == "a" &
+           sim == 1) %>% 
+  mutate(b = as.integer(b)) %>% 
+  ggplot(aes(x = log_pred_mass, y = value)) + 
+  geom_line(aes(group = sim)) +
+  labs(title = 'Slope = -1179',
+       y = "Prey Mass log(g)",
+       x = "Predator Mass log(g)") +
+  theme_default() +
+  theme(text = element_text(size = 20)) +
+  ylim(-5e4, 6e4)
+
+pred_prey_sim <- fake_data %>% 
+  filter(response != "logpreymasssims" & 
+           model == "a") %>% 
+  mutate(b = as.integer(b)) %>% 
+  ggplot(aes(x = log_pred_mass, y = value)) + 
+  geom_line(aes(group = sim)) +
+  labs(title = 'Slope = {frame_time}',
+       y = "Prey Mass log(g)",
+       x = "Predator Mass log(g)") +
+  theme_default() +
+  theme(text = element_text(size = 20)) +
+  transition_time(b) +
+  shadow_mark(past = T)  +
+  ylim(-5e4, 6e4)
+
+pred_prey_sim2 <- fake_data %>% 
+  filter(response != "logpreymasssims" & 
+           model == "a") %>% 
+  mutate(b = as.integer(b)) %>% 
+  ggplot(aes(x = log_pred_mass, y = value)) + 
+  geom_line(aes(group = sim)) +
+  labs(title = '',
+       y = "Prey Mass log(g)",
+       x = "Predator Mass log(g)") +
+  theme_default() +
+  theme(text = element_text(size = 20)) +
+  ylim(-5e4, 6e4)
+
+pred_prey_blank <- fake_data %>% 
+  filter(response != "logpreymasssims" & 
+           model == "a") %>% 
+  mutate(b = as.integer(b)) %>% 
+  ggplot(aes(x = log_pred_mass, y = value)) + 
+  # geom_line(aes(group = sim)) +
+  labs(title = '',
+       y = "Prey Mass log(g)",
+       x = "Predator Mass log(g)") +
+  theme(text = element_text(size = 20)) 
+
+pred_prey_narrow <- fake_data %>% 
+  filter(response != "logpreymasssims" & 
+           model == "b") %>% 
+  mutate(b = as.integer(b)) %>% 
+  ggplot(aes(x = log_pred_mass, y = value)) + 
+  geom_line(aes(group = sim)) +
+  theme_default() +
+  labs(title = "",
+       y = "Prey Mass log(g)",
+       x = "Predator Mass log(g)") +
+  theme(text = element_text(size = 20))
+
+pred_prey_narrowest <- fake_data %>% 
+  filter(response != "logpreymasssims" & 
+           model == "c") %>% 
+  mutate(b = as.integer(b)) %>% 
+  ggplot(aes(x = log_pred_mass, y = value)) + 
+  geom_line(aes(group = sim)) +
+  labs(title = "",
+       y = "Prey Mass log(g)",
+       x = "Predator Mass log(g)") +
+  theme_default() +
+  theme(text = element_text(size = 20))
+
+pred_prey_narrowest_shade <- fake_data %>% 
+  filter(response != "logpreymasssims" & 
+           model == "c") %>% 
+  mutate(b = as.integer(b)) %>% 
+  group_by(log_pred_mass) %>% 
+  median_qi(value) %>% 
+  ggplot(aes(x = log_pred_mass, y = value)) + 
+  geom_line() +
+  geom_ribbon(aes(ymin = .lower, ymax = .upper),
+              alpha = 0.2) +
+  labs(title = "",
+       y = "Prey Mass log(g)",
+       x = "Predator Mass log(g)") +
+  theme_default() +
+  theme(text = element_text(size = 20)) +
+  ylim(-60, 60) 
+
+pred_prey_final_dots <- pred_prey_narrowest_shade +
+  geom_point(data = d, aes(x = log_pred, y = log_prey), size = 0.1,
+             shape = 21) 
+
+pred_prey_final_dots_2 <- fake_data %>% 
+  filter(response != "logpreymasssims" & 
+           model == "c") %>% 
+  mutate(b = as.integer(b)) %>% 
+  group_by(log_pred_mass) %>% 
+  median_qi(value) %>% 
+  ggplot(aes(x = log_pred_mass, y = value)) +
+  geom_point(data = d, aes(x = log_pred, y = log_prey),
+             shape = 21, size = 0.1) + 
+  geom_line(alpha = 0.2) +
+  geom_ribbon(aes(ymin = .lower, ymax = .upper),
+              alpha = 0.08) +
+  labs(title = "",
+       y = "Prey Mass log(g)",
+       x = "Predator Mass log(g)") +
+  theme_default() +
+  theme(text = element_text(size = 20)) +
+  geom_smooth(data = d, aes(x = log_pred, y = log_prey), method = "lm") +
+  ylim(-60, 60) 
+
+ggsave(pred_prey_data, file = "plots/pred_prey_data.jpg", width = 5, height = 5)
+ggsave(pred_prey_data_line, file = "plots/pred_prey_data_line.jpg", width = 5, height = 5)
+ggsave(pred_prey_data_line_only, file = "plots/pred_prey_data_line_only.jpg", width = 5, height = 5)
+ggsave(pred_prey_blank, file = "plots/pred_prey_blank.jpg", width = 5, height = 5)
+ggsave(pred_prey_sim1, file = "plots/pred_prey_sim1.jpg", width = 5, height = 5)
+ggsave(pred_prey_sim2, file = "plots/pred_prey_sim2.jpg", width = 5, height = 5)
+ggsave(pred_prey_narrow, file = "plots/pred_prey_narrow.jpg", width = 5, height = 5)
+ggsave(pred_prey_narrowest_shade, file = "plots/pred_prey_narrowest_shade.jpg", width = 5, height = 5)
+ggsave(pred_prey_narrowest, file = "plots/pred_prey_narrowest.jpg", width = 5, height = 5)
+ggsave(pred_prey_final_dots, file = "plots/pred_prey_final_dots.jpg", width = 5, height = 5)
+ggsave(pred_prey_final_dots_2, file = "plots/pred_prey_final_dots_2.jpg", width = 5, height = 5)
+ggsave(pred_prey_final, file = "plots/pred_prey_final.jpg", width = 5, height = 5)
+
+anim_save("plots/pred_prey_sim.gif", pred_prey_sim)
 
 #  t-test freq vs bayes ---------------------------------------------------
 

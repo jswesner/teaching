@@ -1,0 +1,233 @@
+country,sex_ratio
+ Afghanistan,1.05
+ Albania,1.08
+ Algeria,1.05
+ American Samoa (US),1.06
+ Andorra,1.07
+ Angola,1.03
+ Anguilla (UK),1.03
+ Antigua and Barbuda,1.05
+ Argentina,1.07
+ Armenia,1.1
+ Aruba (Netherlands),1.02
+ Australia,1.06
+ Austria,1.05
+ Azerbaijan,1.06
+" Bahamas, The",1.03
+ Bahrain,1.03
+ Bangladesh,1.04
+ Barbados,1.01
+ Belarus,1.06
+ Belgium,1.05
+ Belize,1.05
+ Benin,1.05
+ Bermuda (UK),1.02
+ Bhutan,1.05
+ Bolivia,1.05
+ Bosnia and Herzegovina,1.07
+ Botswana,1.03
+ Brazil,1.05
+ Brunei,1.05
+ Bulgaria,1.06
+ Burkina Faso,1.03
+ Burundi,1.03
+ Cambodia,1.05
+ Cameroon,1.03
+ Canada,1.05
+ Cape Verde,1.03
+ Cayman Islands (UK),1.02
+ Central African Republic,1.03
+ Chad,1.04
+ Chile,1.04
+ China,1.11
+ Colombia,1.06
+ Comoros,1.03
+" Congo, Democratic Republic of the",1.03
+" Congo, Republic of the",1.03
+ Cook Islands (New Zealand),1.05
+ Costa Rica,1.05
+ Croatia,1.06
+ Cuba,1.06
+ Curacao (Netherlands),1.05
+ Cyprus,1.05
+ Czechia,1.05
+ Denmark,1.07
+ Djibouti,1.03
+ Dominica,1.05
+ Dominican Republic,1.04
+ Ecuador,1.05
+ Egypt,1.06
+ El Salvador,1.05
+ Equatorial Guinea,1.03
+ Eritrea,1.03
+ Estonia,1.05
+ Eswatini (Swaziland),1.03
+ Ethiopia,1.03
+ European Union,1.06
+ Falkland Islands (UK),N/A
+ Faroe Islands (Denmark),1.07
+ Fiji,1.05
+ Finland,1.05
+ France,1.05
+ French Polynesia (France),1.05
+ Gabon,1.03
+" Gambia, The",1.03
+ Gaza Strip/Palestine,1.06
+ Georgia,1.05
+ Germany,1.05
+ Ghana,1.03
+ Gibraltar (UK),1.07
+ Greece,1.07
+ Greenland (Denmark),1.05
+ Grenada,1.1
+ Guam (US),1.07
+ Guatemala,1.05
+ Guernsey (UK),1.05
+ Guinea,1.03
+ Guinea-Bissau,1.03
+ Guyana,1.05
+ Haiti,1.01
+ Honduras,1.03
+ Hong Kong (China),1.06
+ Hungary,1.06
+ Iceland,1.05
+ India,1.11
+ Indonesia,1.05
+ Iran,1.05
+ Iraq,1.05
+ Ireland,1.06
+ Isle of Man (UK),1.08
+ Israel,1.05
+ Italy,1.06
+ Ivory Coast,1.03
+ Jamaica,1.05
+ Japan,1.06
+ Jersey (UK),1.06
+ Jordan,1.06
+ Kazakhstan,0.94
+ Kenya,1.02
+ Kiribati,1.05
+" Korea, North",1.06
+" Korea, South",1.05
+ Kosovo,1.08
+ Kuwait,1.05
+ Kyrgyzstan,1.07
+ Laos,1.04
+ Latvia,1.05
+ Lebanon,1.05
+ Lesotho,1.03
+ Liberia,1.03
+ Libya,1.05
+ Liechtenstein,1.26
+ Lithuania,1.06
+ Luxembourg,1.06
+ Macau (China),1.05
+ Madagascar,1.03
+ Malawi,1.02
+ Malaysia,1.07
+ Maldives,1.05
+ Mali,1.03
+ Malta,1.04
+ Marshall Islands,1.05
+ Mauritania,1.03
+ Mauritius,1.05
+ Mexico,1.05
+" Micronesia, Federated States of",1.05
+ Moldova,1.06
+ Monaco,1.03
+ Mongolia,1.05
+ Montenegro,1.04
+ Montserrat (UK),1.03
+ Morocco,1.05
+ Mozambique,1.03
+ Myanmar (Burma),1.06
+ Namibia,1.03
+ Nauru,0.84
+   Nepal,1.06
+ Netherlands,1.05
+ New Caledonia (France),1.05
+ New Zealand,1.05
+ Nicaragua,1.05
+ Niger,1.03
+ Nigeria,1.06
+ North Macedonia,1.07
+ Northern Mariana Islands (US),1.16
+ Norway,1.05
+ Oman,1.05
+ Pakistan,1.05
+ Palau,1.07
+ Panama,1.04
+ Papua New Guinea,1.05
+ Paraguay,1.05
+ Peru,1.05
+ Philippines,1.05
+ Poland,1.06
+ Portugal,1.05
+ Puerto Rico (US),1.06
+ Qatar,1.02
+ Romania,1.06
+ Russia,1.06
+ Rwanda,1.03
+ Saint Barthelemy (France),1.06
+" Saint Helena, Ascension and Tristan da Cunha (UK)",1.06
+ Saint Kitts and Nevis,1.02
+ Saint Lucia,1.06
+ Saint Martin (France),1.04
+ Saint Pierre and Miquelon (France),1.06
+ Saint Vincent and the Grenadines,1.03
+ Samoa,1.05
+ San Marino,1.09
+ Sao Tome and Principe,1.03
+ Saudi Arabia,1.05
+ Senegal,1.03
+ Serbia,1.07
+ Seychelles,1.03
+ Sierra Leone,1.03
+ Singapore,1.07
+ Sint Maarten (Netherlands),1.05
+ Slovakia,1.07
+ Slovenia,1.04
+ Solomon Islands,1.05
+ Somalia,1.03
+ South Africa,1.02
+ South Sudan,1.05
+ Spain,1.07
+ Sri Lanka,1.04
+ Sudan,1.05
+ Suriname,1.05
+ Sweden,1.06
+  Switzerland,1.06
+ Syria,1.06
+ Taiwan,1.06
+ Tajikistan,1.05
+ Tanzania,1.03
+ Thailand,1.05
+ Timor-Leste,1.07
+ Togo,1.03
+ Tonga,1.03
+ Trinidad and Tobago,1.03
+ Tunisia,1.06
+ Turkey,1.05
+ Turkmenistan,1.05
+ Turks and Caicos Islands (UK),1.05
+ Tuvalu,1.05
+ Uganda,1.03
+ Ukraine,1.06
+ United Arab Emirates,1.06
+ United Kingdom,1.05
+ United States,1.05
+ Uruguay,1.04
+ Uzbekistan,1.06
+ Vanuatu,1.05
+  Vatican City,--
+ Venezuela,1.05
+ Vietnam,1.09
+ Virgin Islands (UK),1.05
+ Virgin Islands (US),1.06
+ Wallis and Futuna (France),1.05
+ West Bank/Palestine,1.06
+ Western Sahara,1.04
+ World,1.07
+ Yemen,1.05
+ Zambia,1.03
+ Zimbabwe,1.03
