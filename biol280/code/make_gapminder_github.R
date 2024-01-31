@@ -1,4 +1,5 @@
 library(tidyverse)
+library(gapminder)
 
 # load final product (recreate with code below)
 all_long <- read_csv("biol280/data/gapminder/all_data_together/all_gapminder_data.csv")
@@ -15,29 +16,37 @@ ddf_entities_geo_country <- read_csv("C:/Users/Jeff.Wesner/OneDrive - The Univer
          country = name)
 
 # read all files for gapminder data csv's
-files <- list.files(path = "C:/Users/Jeff.Wesner/Documents/GitHub Projects/gapminder/gapminder/countries-etc-datapoints",
+files <- list.files(path = "C:/Users/Jeff.Wesner/OneDrive - The University of South Dakota/USD/Github Projects/gapminder-offline/ddf--gapminder--systema_globalis",
              pattern = ".*csv",
              full.names = T) 
 
-tbl <- sapply(files, read_csv, simplify=FALSE)
+tbl <- sapply(files[-1], read_csv, simplify=FALSE)
 
-all_gapminder <- as.list(tbl) %>% 
-  reduce(left_join)
+tbl_temp = NULL
 
-# pivot all csv's together
-all_long <- all_gapminder %>% 
-  filter(time <= 2021) %>% 
-  rename(year = time) %>% 
-  mutate_if(is.numeric,as.character, is.factor, as.character) %>% 
-  pivot_longer(cols = c(-geo, -year)) %>% 
-  mutate(year = as.integer(year),
-         value = as.numeric(value)) %>% 
-  left_join(ddf_entities_geo_country %>% distinct(country, geo)) %>% 
-  select(country, year, everything())
+country_continent = gapminder %>% ungroup %>% distinct(country, continent)
 
+for (i in 1:length(tbl)) {
+  tryCatch({
+    tbl_temp[[i]] = tbl[[i]] %>% 
+      left_join(ddf_entities_geo_country %>% select(geo, country, income_3groups, latitude, longitude, main_religion_2008,
+                                                    un_sdg_ldc, world_4region),
+                by = c("geo")) %>% 
+      rename(value = 3,
+             year = time) %>% 
+      left_join(country_continent) %>% 
+      select(-geo)  %>% 
+      select(country, year, value, continent, everything()) %>% 
+      rename_with(~ names(tbl[[i]][3]), value)
+    
+  }, error = function(e) {
+    # Print or handle the error if needed
+    cat("Error in iteration", i, ":", conditionMessage(e), "\n")
+  })
+}
 
+for(i in 1:length(tbl_temp)){
+  saveRDS(tbl_temp[[i]], file = paste0("biol280/data/gapminder/all_data_curated_rds/", names(tbl_temp[[i]][3]), ".rds"))
 
-# write csv's for every group
-all_long_curated %>%
-  group_by(name) %>%
-  group_walk(~ saveRDS(.x, file = paste0("biol280/data/gapminder/all_data_curated_rds/", .y$name, ".rds")))
+}
+
